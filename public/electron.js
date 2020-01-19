@@ -5,7 +5,6 @@
 //  │ REQUIRE THIRDPARTY DEPENDENCIES MODULES.                                          │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 const electron = require('electron');
-const notifier = require('node-notifier');
 const isDev = require('electron-is-dev');
 const {
   default: installExtension,
@@ -20,14 +19,26 @@ const path = require('path');
 const url = require('url');
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
+//  │ PATH OF FILES.                                                                    │
+//  └───────────────────────────────────────────────────────────────────────────────────┘
+const webcontextPath = path.join(__dirname, '..', 'system', 'node-integration.js');
+const appIconPath = path.join(__dirname, '..', 'assets', 'icons', 'icon.ico');
+
+//  ┌───────────────────────────────────────────────────────────────────────────────────┐
+//  │ PATH MY DEPENDENCIES MODULES.                                                     │
+//  └───────────────────────────────────────────────────────────────────────────────────┘
+const helpersPath = path.join(__dirname, '..', 'system', 'helpers');
+
+//  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ REQUIRE MY DEPENDENCIES MODULES.                                                  │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-const webcontext = path.join(__dirname, '..', 'system', 'node-integration.js');
+const helpers = require(helpersPath);
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ DESTRUCTURING DEPENDENCIES.                                                       │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-const { app, BrowserWindow, ipcMain } = electron;
+const { app, BrowserWindow, ipcMain, Menu, Tray } = electron;
+const { sendNotification } = helpers;
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ DECLARATION OF CONSTANTS-VARIABLES.                                               │
@@ -42,7 +53,6 @@ if (isDev) {
   });
   process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true;
 }
-
 // !SECTION
 
 // SECTION: WORSPACE FOR PRODUCTION
@@ -51,6 +61,10 @@ if (isDev) {
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
+
+// Keep a global reference of the appIcon object, if you don't, the appIcon will
+// be closed automatically when the JavaScript object is garbage collected.
+let appIcon = null;
 
 // » html file for mainWindow
 const startUrl = isDev
@@ -76,7 +90,7 @@ function createWindow() {
     fullscreenable: false,
     webPreferences: {
       nodeIntegration: false,
-      preload: webcontext,
+      preload: webcontextPath,
     },
   });
 
@@ -117,9 +131,13 @@ function createWindow() {
 }
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
+//  │ LOGGIN PATH OF APP                                                                │
+//  └───────────────────────────────────────────────────────────────────────────────────┘
+console.log(app.getPath('userData'));
+
+//  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ APPLICATION'S EVENT LISTENERS                                                     │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -127,6 +145,18 @@ function createWindow() {
 // » Emitted when Electron has finished initializing.
 app.on('ready', () => {
   createWindow();
+  appIcon = new Tray(appIconPath);
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Cerrar',
+      type: 'normal',
+      click: () => {
+        app.quit();
+      },
+    },
+  ]);
+  appIcon.setToolTip('Simple Handle Data');
+  appIcon.setContextMenu(contextMenu);
 });
 
 // » Emitted when all windows have been closed.
@@ -145,11 +175,26 @@ app.on('activate', () => {
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ IPC'S EVENT LISTENERS (Inter-Process Communication)                               │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-ipcMain.on('send-notification', (event, notification) => {
-  notifier.notify({
+ipcMain.on('send-info-notification', (event, notification) => {
+  sendNotification({
     title: notification.title,
     message: notification.message,
+    type: 'info',
   });
 });
 
-console.log(app.getPath('userData'));
+ipcMain.on('send-warn-notification', (event, notification) => {
+  sendNotification({
+    title: notification.title,
+    message: notification.message,
+    type: 'warn',
+  });
+});
+
+ipcMain.on('send-error-notification', (event, notification) => {
+  sendNotification({
+    title: notification.title,
+    message: notification.message,
+    type: 'error',
+  });
+});
