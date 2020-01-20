@@ -147,8 +147,8 @@
   },
   "build": {
     "appId": "com.electron.reactronboilerplate",
-    "productName": "reactron-boilerplate",
-    "copyright": "Copyright © year 2019 ${author}",
+    "productName": "Reactron Boilerplate",
+    "copyright": "Copyright © year 2020 ${author}",
     "artifactName": "${name}-${version}-${platform}.${ext}",
     "asar": true,
     "directories": {
