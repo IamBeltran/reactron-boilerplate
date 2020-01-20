@@ -150,7 +150,7 @@
   "build": {
     "appId": "com.electron.reactronboilerplate",
     "productName": "Reactron Boilerplate",
-    "copyright": "Copyright © year 2020 ${author}",
+    "copyright": "Copyright © 2014-2020 BRSoft, LLC",
     "artifactName": "${name}-${version}-${platform}.${ext}",
     "asar": true,
     "directories": {
