@@ -85,7 +85,7 @@ function createWindow() {
     height: 600,
     titleBarStyle: 'hidden',
     show: false,
-    // icon: getIcons('icon'),
+    icon: getIcons('icon'),
     resizable: false,
     fullscreenable: false,
     webPreferences: {
