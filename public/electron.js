@@ -39,7 +39,7 @@ const utils = require(utilsPath);
 const { app, BrowserWindow, ipcMain } = electron;
 const {
   loggers: { logger, loggerWithLabel },
-  getAssets: { getIcons },
+  getAssets: { getIcons, getPackageJSON },
 } = helpers;
 const { createTray, installExtensions, sendNotification } = utils;
 
@@ -128,7 +128,7 @@ function createWindow() {
 //  │ LOGGIN PATH OF APP                                                                │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 logger(app.getPath('userData'));
-logger(getIcons('icon'));
+logger(getPackageJSON());
 loggerWithLabel('Label', 'Hola mundo');
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐

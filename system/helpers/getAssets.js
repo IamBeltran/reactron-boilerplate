@@ -47,8 +47,17 @@ const icons = {
  */
 const getIcons = name => path.join(__dirname, '..', '..', 'assets', 'icons', icons[`${name}`]);
 
+/**
+ *
+ * @name          getPackageJSON
+ * @description   Function that return a package.json path
+ * @returns       {string} - package.json
+ */
+const getPackageJSON = () => path.join(__dirname, '..', '..', 'package.json');
+
 //  ──[ EXPORT MODULE ]──────────────────────────────────────────────────────────────────
 const getAssets = (module.exports = exports = {}); // eslint-disable-line no-multi-assign
 
 // » Main Modules
 getAssets.getIcons = getIcons;
+getAssets.getPackageJSON = getPackageJSON;
