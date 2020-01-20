@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable global-require */
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
@@ -25,17 +24,23 @@ const webcontextPath = path.join(__dirname, '..', 'system', 'node-integration.js
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ PATH MY DEPENDENCIES MODULES.                                                     │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
+const helpersPath = path.join(__dirname, '..', 'system', 'helpers');
 const utilsPath = path.join(__dirname, '..', 'system', 'utils');
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ REQUIRE MY DEPENDENCIES MODULES.                                                  │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
+const helpers = require(helpersPath);
 const utils = require(utilsPath);
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ DESTRUCTURING DEPENDENCIES.                                                       │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 const { app, BrowserWindow, ipcMain } = electron;
+const {
+  loggers: { logger, loggerWithLabel },
+  getAssets: { getIcons },
+} = helpers;
 const { createTray, installExtensions, sendNotification } = utils;
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
@@ -80,6 +85,7 @@ function createWindow() {
     height: 600,
     titleBarStyle: 'hidden',
     show: false,
+    // icon: getIcons('icon'),
     resizable: false,
     fullscreenable: false,
     webPreferences: {
@@ -121,7 +127,9 @@ function createWindow() {
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ LOGGIN PATH OF APP                                                                │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-console.log(app.getPath('userData'));
+logger(app.getPath('userData'));
+logger(getIcons('icon'));
+loggerWithLabel('Label', 'Hola mundo');
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ APPLICATION'S EVENT LISTENERS                                                     │
