@@ -11,16 +11,15 @@ const electron = require('electron');
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ REQUIRE NODEJS DEPENDENCIES MODULE.                                               │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-const path = require('path');
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ PATH OF FILES.                                                                    │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-const appIconPath = path.join(__dirname, '..', '..', '..', 'assets', 'icons', 'icon.ico');
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ REQUIRE MY DEPENDENCIES MODULES.                                                  │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
+const { getIcons } = require('../../helpers/getAssets');
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ DESTRUCTURING DEPENDENCIES.                                                       │
@@ -33,6 +32,7 @@ const { app, Menu, Tray } = electron;
 // Keep a global reference of the appIcon object, if you don't, the appIcon will
 // be closed automatically when the JavaScript object is garbage collected.
 let appIcon = null;
+const appIconPath = getIcons('icon');
 const contextMenu = Menu.buildFromTemplate([
   {
     label: 'Cerrar',
