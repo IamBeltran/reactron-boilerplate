@@ -155,7 +155,7 @@ app.on('ready', () => {
       },
     },
   ]);
-  appIcon.setToolTip('Simple Handle Data');
+  appIcon.setToolTip('REACTRON');
   appIcon.setContextMenu(contextMenu);
 });
 
