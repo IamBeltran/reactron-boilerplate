@@ -1,10 +1,12 @@
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
-//  │ REQUIRE HELPER MODULES.                                                           │
+//  │ REQUIRE UTILS MODULES.                                                            │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 const sendNotification = require('./sendNotification');
+const installExtensions = require('./installExtensions');
 
 //  ──[ EXPORT MODULE ]──────────────────────────────────────────────────────────────────
-const helpers = (module.exports = exports = {}); // eslint-disable-line no-multi-assign
+const utils = (module.exports = exports = {}); // eslint-disable-line no-multi-assign
 
 // » Main Modules
-helpers.sendNotification = sendNotification;
+utils.sendNotification = sendNotification;
+utils.installExtensions = installExtensions;
