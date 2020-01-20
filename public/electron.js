@@ -4,13 +4,12 @@
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ REQUIRE THIRDPARTY DEPENDENCIES MODULES.                                          │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
+const isDevelopment = require('electron-is-dev');
+
+//  ┌───────────────────────────────────────────────────────────────────────────────────┐
+//  │ REQUIRE ELECTRON DEPENDENCIES MODULES.                                            │
+//  └───────────────────────────────────────────────────────────────────────────────────┘
 const electron = require('electron');
-const isDev = require('electron-is-dev');
-const {
-  default: installExtension,
-  REACT_DEVELOPER_TOOLS,
-  REDUX_DEVTOOLS,
-} = require('electron-devtools-installer');
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ REQUIRE NODEJS DEPENDENCIES MODULE.                                               │
@@ -22,30 +21,29 @@ const url = require('url');
 //  │ PATH OF FILES.                                                                    │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 const webcontextPath = path.join(__dirname, '..', 'system', 'node-integration.js');
-const appIconPath = path.join(__dirname, '..', 'assets', 'icons', 'icon.ico');
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ PATH MY DEPENDENCIES MODULES.                                                     │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-const helpersPath = path.join(__dirname, '..', 'system', 'helpers');
+const utilsPath = path.join(__dirname, '..', 'system', 'utils');
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ REQUIRE MY DEPENDENCIES MODULES.                                                  │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-const helpers = require(helpersPath);
+const utils = require(utilsPath);
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ DESTRUCTURING DEPENDENCIES.                                                       │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-const { app, BrowserWindow, ipcMain, Menu, Tray } = electron;
-const { sendNotification } = helpers;
+const { app, BrowserWindow, ipcMain } = electron;
+const { createTray, installExtensions, sendNotification } = utils;
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ DECLARATION OF CONSTANTS-VARIABLES.                                               │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 
 // SECTION: WORSPACE FOR DEVELOPMENT
-if (isDev) {
+if (isDevelopment) {
   // Enable live reload for Electron too
   const electronPath = path.resolve(__dirname, '..', 'node_modules/electron');
   require('electron-reload')(__dirname, {
@@ -62,12 +60,8 @@ if (isDev) {
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
-// Keep a global reference of the appIcon object, if you don't, the appIcon will
-// be closed automatically when the JavaScript object is garbage collected.
-let appIcon = null;
-
 // » html file for mainWindow
-const startUrl = isDev
+const startUrl = isDevelopment
   ? 'http://localhost:3000'
   : url.format({
       pathname: path.join(__dirname, '/../build/index.html'),
@@ -97,19 +91,13 @@ function createWindow() {
   // » And load the index.html of the app.
   mainWindow.loadURL(startUrl);
 
-  if (!isDev) {
+  if (!isDevelopment) {
     mainWindow.removeMenu();
   }
 
-  if (isDev) {
+  if (isDevelopment) {
     mainWindow.webContents.once('dom-ready', () => {
-      require('devtron').install();
-      installExtension(REACT_DEVELOPER_TOOLS)
-        .then(name => console.log(`Added Extension:  ${name}`))
-        .catch(err => console.log('An error occurred: ', err));
-      installExtension(REDUX_DEVTOOLS)
-        .then(name => console.log(`Added Extension:  ${name}`))
-        .catch(err => console.log('An error occurred: ', err));
+      installExtensions();
       mainWindow.webContents.openDevTools();
     });
   }
@@ -145,18 +133,7 @@ console.log(app.getPath('userData'));
 // » Emitted when Electron has finished initializing.
 app.on('ready', () => {
   createWindow();
-  appIcon = new Tray(appIconPath);
-  const contextMenu = Menu.buildFromTemplate([
-    {
-      label: 'Cerrar',
-      type: 'normal',
-      click: () => {
-        app.quit();
-      },
-    },
-  ]);
-  appIcon.setToolTip('REACTRON');
-  appIcon.setContextMenu(contextMenu);
+  createTray();
 });
 
 // » Emitted when all windows have been closed.
@@ -169,7 +146,10 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (mainWindow === null) createWindow();
+  if (mainWindow === null) {
+    createWindow();
+    createTray();
+  }
 });
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
