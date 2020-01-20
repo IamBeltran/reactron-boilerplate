@@ -39,7 +39,7 @@ const utils = require(utilsPath);
 const { app, BrowserWindow, ipcMain } = electron;
 const {
   loggers: { logger, loggerWithLabel },
-  getAssets: { getIcons, getPackageJSON },
+  getAssets: { getIcons },
 } = helpers;
 const { createTray, installExtensions, sendNotification } = utils;
 
@@ -127,9 +127,22 @@ function createWindow() {
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ LOGGIN PATH OF APP                                                                │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-logger(app.getPath('userData'));
-logger(getPackageJSON());
-loggerWithLabel('Label', 'Hola mundo');
+logger('Starting electron application');
+loggerWithLabel('      Home', app.getPath('home'));
+loggerWithLabel('  App Data', app.getPath('appData'));
+loggerWithLabel(' User Data', app.getPath('userData'));
+loggerWithLabel('     Cache', app.getPath('cache'));
+loggerWithLabel('      Temp', app.getPath('temp'));
+loggerWithLabel('       Exe', app.getPath('exe'));
+loggerWithLabel('    Module', app.getPath('module'));
+loggerWithLabel('   Desktop', app.getPath('desktop'));
+loggerWithLabel(' Documents', app.getPath('documents'));
+loggerWithLabel(' Downloads', app.getPath('downloads'));
+loggerWithLabel('     Music', app.getPath('music'));
+loggerWithLabel('  Pictures', app.getPath('pictures'));
+loggerWithLabel('    Videos', app.getPath('videos'));
+loggerWithLabel('      Logs', app.getPath('logs'));
+// loggerWithLabel('FlashSystem', app.getPath('pepperFlashSystemPlugin'));
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ APPLICATION'S EVENT LISTENERS                                                     │
@@ -140,6 +153,7 @@ loggerWithLabel('Label', 'Hola mundo');
 // app.on('ready', createWindow);
 // » Emitted when Electron has finished initializing.
 app.on('ready', () => {
+  logger('APP ON READY');
   createWindow();
   createTray();
 });
@@ -154,10 +168,18 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
+  logger('APP ON ACTIVATE');
   if (mainWindow === null) {
     createWindow();
     createTray();
   }
+});
+
+// »  Emitted before the application starts closing its windows..
+app.on('before-quit', () => {
+  // On macOS it's common to re-create a window in the app when the
+  // dock icon is clicked and there are no other windows open.
+  logger('APP IS CLOSING');
 });
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
