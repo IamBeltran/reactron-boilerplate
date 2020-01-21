@@ -136,25 +136,25 @@ app.setPath('userData', USER_DATA_PATH);
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ LOGGIN PATH OF APP                                                                │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-loggerInfo('Starting electron application');
-loggerWithLabel('      Home', app.getPath('home'));
-loggerWithLabel('  App Data', app.getPath('appData'));
-loggerWithLabel(' User Data', app.getPath('userData'));
-loggerWithLabel('     Cache', app.getPath('cache'));
-loggerWithLabel('      Temp', app.getPath('temp'));
-loggerWithLabel('       Exe', app.getPath('exe'));
-loggerWithLabel('    Module', app.getPath('module'));
-loggerWithLabel('   Desktop', app.getPath('desktop'));
-loggerWithLabel(' Documents', app.getPath('documents'));
-loggerWithLabel(' Downloads', app.getPath('downloads'));
-loggerWithLabel('     Music', app.getPath('music'));
-loggerWithLabel('  Pictures', app.getPath('pictures'));
-loggerWithLabel('    Videos', app.getPath('videos'));
-loggerWithLabel('      Logs', app.getPath('logs'));
-loggerWithLabel('  App Path', app.getAppPath());
-
-// loggerWithLabel('FlashSystem', app.getPath('pepperFlashSystemPlugin'));
-
+if (isDevelopment) {
+  loggerInfo('Starting electron application');
+  loggerWithLabel('      Home', app.getPath('home'));
+  loggerWithLabel('  App Data', app.getPath('appData'));
+  loggerWithLabel(' User Data', app.getPath('userData'));
+  loggerWithLabel('     Cache', app.getPath('cache'));
+  loggerWithLabel('      Temp', app.getPath('temp'));
+  loggerWithLabel('       Exe', app.getPath('exe'));
+  loggerWithLabel('    Module', app.getPath('module'));
+  loggerWithLabel('   Desktop', app.getPath('desktop'));
+  loggerWithLabel(' Documents', app.getPath('documents'));
+  loggerWithLabel(' Downloads', app.getPath('downloads'));
+  loggerWithLabel('     Music', app.getPath('music'));
+  loggerWithLabel('  Pictures', app.getPath('pictures'));
+  loggerWithLabel('    Videos', app.getPath('videos'));
+  loggerWithLabel('      Logs', app.getPath('logs'));
+  loggerWithLabel('  App Path', app.getAppPath());
+  // loggerWithLabel('FlashSystem', app.getPath('pepperFlashSystemPlugin'));
+}
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ APPLICATION'S EVENT LISTENERS                                                     │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
@@ -196,6 +196,7 @@ app.on('before-quit', () => {
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ IPC'S EVENT LISTENERS (Inter-Process Communication)                               │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
+// » SEND-INFO-NOTIFICATION
 ipcMain.on('send-info-notification', (event, notification) => {
   sendNotification({
     title: notification.title,
@@ -204,6 +205,7 @@ ipcMain.on('send-info-notification', (event, notification) => {
   });
 });
 
+// » SEND-WARN-NOTIFICATION
 ipcMain.on('send-warn-notification', (event, notification) => {
   sendNotification({
     title: notification.title,
@@ -212,6 +214,7 @@ ipcMain.on('send-warn-notification', (event, notification) => {
   });
 });
 
+// » SEND-ERROR-NOTIFICATION
 ipcMain.on('send-error-notification', (event, notification) => {
   sendNotification({
     title: notification.title,
