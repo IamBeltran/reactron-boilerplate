@@ -6,15 +6,23 @@
 const isDevelopment = require('electron-is-dev');
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
-//  │ REQUIRE ELECTRON DEPENDENCIES MODULES.                                            │
-//  └───────────────────────────────────────────────────────────────────────────────────┘
-const electron = require('electron');
-
-//  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ REQUIRE NODEJS DEPENDENCIES MODULE.                                               │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 const path = require('path');
 const url = require('url');
+
+//  ┌───────────────────────────────────────────────────────────────────────────────────┐
+//  │ REQUIRE CONFIGURATIONS APP.                                                       │
+//  └───────────────────────────────────────────────────────────────────────────────────┘
+const configurationsPath = path.join(__dirname, '..', 'system', 'configurations');
+const { USER_DATA_PATH, APP_ICON } = require(configurationsPath);
+
+//  ┌───────────────────────────────────────────────────────────────────────────────────┐
+//  │ REQUIRE ELECTRON DEPENDENCIES MODULES.                                            │
+//  └───────────────────────────────────────────────────────────────────────────────────┘
+const { app, BrowserWindow, ipcMain } = require('electron');
+
+app.setPath('userData', USER_DATA_PATH);
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ PATH OF FILES.                                                                    │
@@ -24,7 +32,7 @@ const webcontextPath = path.join(__dirname, '..', 'system', 'node-integration.js
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ PATH MY DEPENDENCIES MODULES.                                                     │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-const configurationsPath = path.join(__dirname, '..', 'system', 'configurations');
+
 const helpersPath = path.join(__dirname, '..', 'system', 'helpers');
 const storePath = path.join(__dirname, '..', 'system', 'store');
 const utilsPath = path.join(__dirname, '..', 'system', 'utils');
@@ -32,7 +40,6 @@ const utilsPath = path.join(__dirname, '..', 'system', 'utils');
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ REQUIRE MY DEPENDENCIES MODULES.                                                  │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-const configurations = require(configurationsPath);
 const helpers = require(helpersPath);
 const Store = require(storePath);
 const utils = require(utilsPath);
@@ -40,8 +47,7 @@ const utils = require(utilsPath);
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ DESTRUCTURING DEPENDENCIES.                                                       │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-const { app, BrowserWindow, ipcMain } = electron;
-const { USER_DATA_PATH, APP_ICON } = configurations;
+
 const {
   loggers: { loggerInfo, loggerWithLabel },
 } = helpers;
