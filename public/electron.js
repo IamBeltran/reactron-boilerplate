@@ -24,22 +24,26 @@ const webcontextPath = path.join(__dirname, '..', 'system', 'node-integration.js
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ PATH MY DEPENDENCIES MODULES.                                                     │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
+const configurationsPath = path.join(__dirname, '..', 'system', 'configurations');
 const helpersPath = path.join(__dirname, '..', 'system', 'helpers');
+const storePath = path.join(__dirname, '..', 'system', 'store');
 const utilsPath = path.join(__dirname, '..', 'system', 'utils');
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ REQUIRE MY DEPENDENCIES MODULES.                                                  │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
+const configurations = require(configurationsPath);
 const helpers = require(helpersPath);
+const Store = require(storePath);
 const utils = require(utilsPath);
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ DESTRUCTURING DEPENDENCIES.                                                       │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 const { app, BrowserWindow, ipcMain } = electron;
+const { USER_DATA_PATH, APP_ICON } = configurations;
 const {
-  loggers: { logger, loggerWithLabel },
-  getAssets: { getIcons },
+  loggers: { loggerInfo, loggerWithLabel },
 } = helpers;
 const { createTray, installExtensions, sendNotification } = utils;
 
@@ -85,7 +89,7 @@ function createWindow() {
     height: 600,
     titleBarStyle: 'hidden',
     show: false,
-    icon: getIcons('icon'),
+    icon: APP_ICON,
     resizable: false,
     fullscreenable: false,
     webPreferences: {
@@ -101,12 +105,12 @@ function createWindow() {
     mainWindow.removeMenu();
   }
 
-  if (isDevelopment) {
-    mainWindow.webContents.once('dom-ready', () => {
+  mainWindow.webContents.once('dom-ready', () => {
+    if (isDevelopment) {
       installExtensions();
       mainWindow.webContents.openDevTools();
-    });
-  }
+    }
+  });
 
   // » Emitted when the web page has been rendered (while not being shown)
   // » and window can be displayed without a visual flash.
@@ -125,9 +129,14 @@ function createWindow() {
 }
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
+//  │ SETTINGS OF APP                                                                   │
+//  └───────────────────────────────────────────────────────────────────────────────────┘
+app.setPath('userData', USER_DATA_PATH);
+
+//  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ LOGGIN PATH OF APP                                                                │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-logger('Starting electron application');
+loggerInfo('Starting electron application');
 loggerWithLabel('      Home', app.getPath('home'));
 loggerWithLabel('  App Data', app.getPath('appData'));
 loggerWithLabel(' User Data', app.getPath('userData'));
@@ -142,6 +151,8 @@ loggerWithLabel('     Music', app.getPath('music'));
 loggerWithLabel('  Pictures', app.getPath('pictures'));
 loggerWithLabel('    Videos', app.getPath('videos'));
 loggerWithLabel('      Logs', app.getPath('logs'));
+loggerWithLabel('  App Path', app.getAppPath());
+
 // loggerWithLabel('FlashSystem', app.getPath('pepperFlashSystemPlugin'));
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
@@ -153,7 +164,7 @@ loggerWithLabel('      Logs', app.getPath('logs'));
 // app.on('ready', createWindow);
 // » Emitted when Electron has finished initializing.
 app.on('ready', () => {
-  logger('APP ON READY');
+  loggerInfo('APP ON READY');
   createWindow();
   createTray();
 });
@@ -168,7 +179,7 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  logger('APP ON ACTIVATE');
+  loggerInfo('APP ON ACTIVATE');
   if (mainWindow === null) {
     createWindow();
     createTray();
@@ -179,7 +190,7 @@ app.on('activate', () => {
 app.on('before-quit', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  logger('APP IS CLOSING');
+  loggerInfo('APP IS CLOSING');
 });
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
@@ -208,3 +219,21 @@ ipcMain.on('send-error-notification', (event, notification) => {
     type: 'error',
   });
 });
+
+//  ┌───────────────────────────────────────────────────────────────────────────────────┐
+//  │ STORE                                                                             │
+//  └───────────────────────────────────────────────────────────────────────────────────┘
+const store = new Store();
+loggerWithLabel('Store Path', store.path);
+// const createBook = book => store.createBook(book);
+// const readBooks = () => store.readBooks();
+// const readBookById = id => store.readBookById(id);
+// const updateBookById = id => store.updateBookById(id);
+// const deleteBookById = id => store.deleteBookById(id);
+
+// console.log(
+//   createBook({
+//     title: 'Parque Jurasico',
+//     author: 'Michael Crichton',
+//   }),
+// );
