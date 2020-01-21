@@ -72,6 +72,14 @@ const schema = {
 //  │ DECLARATION OF AUXILIARY FUNCTIONS.                                               │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 const getBsonObjectID = () => ObjectID().toHexString();
+
+/**
+ * @author        Victor Giovanni Beltrán Rodríguez
+ * @name          dateToISOString
+ * @description   Function that return a object with date information
+ * @param         {Date} date - Date for return of the object with date information
+ * @returns       {Object} - Date information
+ */
 const dateToISOString = (date = new Date()) => {
   const tzOffSet = date.getTimezoneOffset() * 60000;
   const unixTime = date.getTime();
