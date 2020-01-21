@@ -14,6 +14,8 @@ const url = require('url');
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ REQUIRE CONFIGURATIONS APP.                                                       │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
+// » Configurations are required before all other modules
+// » to assign USER_DATA_PATH to the userData variable
 const configurationsPath = path.join(__dirname, '..', 'system', 'configurations');
 const { USER_DATA_PATH, APP_ICON } = require(configurationsPath);
 
