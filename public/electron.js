@@ -242,9 +242,28 @@ loggerWithLabel('Store Path', store.path);
 // const updateBookById = id => store.updateBookById(id);
 // const deleteBookById = id => store.deleteBookById(id);
 
-// console.log(
-//   createBook({
-//     title: 'Parque Jurasico',
-//     author: 'Michael Crichton',
-//   }),
-// );
+// const books = [
+//   { title: 'Parque Jurasico', author: 'Michael Crichton' },
+//   { title: 'Harry Potter y la camara secreta', author: 'J.K. Rowling' },
+//   { title: 'Rayuela', author: 'Julio Cortazar' },
+//   { title: 'Las almas muertas', author: 'Nicolai Gogol' },
+//   { title: 'La comedia humana', author: 'Honoré de Balzac' },
+//   { title: 'Cumbres borrascosas', author: 'Emily Brontë' },
+//   { title: 'Luces de bohemia', author: 'Ramón del Valle-Inclán' },
+//   { title: 'La casa de los espíritus', author: 'Isabel Allende' },
+//   { title: 'Preludio a la fundación', author: 'Isaac Asimov' },
+//   { title: 'La muerte de Artemio Cruz', author: 'Carlos Fuentes' },
+//   { title: 'Fahrenheit 451', author: 'Ray Bradbury' },
+//   { title: 'El Buscón', author: 'Francisco de Quevedo' },
+//   { title: 'Drácula', author: 'Bram Stroker' },
+//   { title: 'Cuentos', author: 'Antón Chéjov' },
+//   { title: 'Trópico de cáncer', author: 'Henry Miller' },
+//   { title: 'Crimen y castigo', author: 'Fedor Dostoievski' },
+//   { title: '100 años de Soledad', author: 'Gabriel García Márquez' },
+//   { title: '2666', author: 'Roberto Bolaño' },
+//   { title: 'Ulises', author: 'James Joyce' },
+//   { title: 'Las aventuras de Huckelberry Finn', author: 'Mark Twain' },
+//   { title: 'Príncipes de Maine', author: 'John Irving' },
+// ];
+
+// books.map(book => createBook(book));
