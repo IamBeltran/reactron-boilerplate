@@ -19,7 +19,7 @@ const electron = require('electron');
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ REQUIRE MY DEPENDENCIES MODULES.                                                  │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-const { getIcons } = require('../../helpers/getAssets');
+const { APP_ICON } = require('../../configurations');
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ DESTRUCTURING DEPENDENCIES.                                                       │
@@ -32,7 +32,6 @@ const { app, Menu, Tray } = electron;
 // Keep a global reference of the appIcon object, if you don't, the appIcon will
 // be closed automatically when the JavaScript object is garbage collected.
 let appIcon = null;
-const appIconPath = getIcons('icon');
 const contextMenu = Menu.buildFromTemplate([
   {
     label: 'Cerrar',
@@ -51,7 +50,7 @@ const contextMenu = Menu.buildFromTemplate([
 //  │ SET MAIN MODULE - [NAME-MODULE].                                                  │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 const createTray = () => {
-  appIcon = new Tray(appIconPath);
+  appIcon = new Tray(APP_ICON);
   appIcon.setToolTip('REACTRON');
   appIcon.setContextMenu(contextMenu);
 };
