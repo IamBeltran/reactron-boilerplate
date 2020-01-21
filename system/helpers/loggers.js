@@ -20,6 +20,7 @@ const isDev = require('electron-is-dev');
 //  │ DECLARATION OF CONSTANTS-VARIABLES.                                               │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 const cyan = '\x1b[36m%s\x1b[0m';
+const red = '\x1b[31m%s\x1b[0m';
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ DECLARATION OF AUXILIARY FUNCTIONS.                                               │
@@ -29,12 +30,14 @@ const cyan = '\x1b[36m%s\x1b[0m';
 //  │ SET MAIN MODULE - [NAME-MODULE].                                                  │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 const noop = () => {};
-const logger = str => (!isDev ? noop : console.log(cyan, str));
+const loggerInfo = str => (!isDev ? noop : console.log(cyan, str));
+const loggerError = str => (!isDev ? noop : console.log(red, str));
 const loggerWithLabel = (label, str) => (!isDev ? noop : console.log(cyan, `${label}:`, `${str}`));
 
 //  ──[ EXPORT MODULE ]──────────────────────────────────────────────────────────────────
 const loggers = (module.exports = exports = {}); // eslint-disable-line no-multi-assign
 
 // » Main Modules
-loggers.logger = logger;
+loggers.loggerInfo = loggerInfo;
+loggers.loggerError = loggerError;
 loggers.loggerWithLabel = loggerWithLabel;
