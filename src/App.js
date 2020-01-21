@@ -1,8 +1,13 @@
+// ▶ Import react dependecies
 import React from 'react';
+
+// ▶ Import assets
 import logo from './logo.svg';
+
+// ▶ Import styles css
 import './App.css';
 
-function App() {
+const App = () => {
   return (
     <div className="App">
       <header className="App-header">
@@ -21,6 +26,6 @@ function App() {
       </header>
     </div>
   );
-}
+};
 
 export default App;
