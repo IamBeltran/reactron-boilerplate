@@ -1,9 +1,9 @@
+/* eslint-disable global-require */
 /* eslint-disable no-console */
 /* eslint-disable import/no-extraneous-dependencies */
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ REQUIRE THIRDPARTY DEPENDENCIES MODULES.                                          │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-const devtron = require('devtron');
 const {
   default: installExtension,
   APOLLO_DEVELOPER_TOOLS,
@@ -56,7 +56,7 @@ const installerPromisify = extension => {
 const installExtensions = async () => {
   try {
     loggerInfo('Installing developer tool');
-    devtron.install();
+    require('devtron').install();
     await installerPromisify(APOLLO_DEVELOPER_TOOLS).then(success => loggerInfo(success));
     await installerPromisify(REACT_DEVELOPER_TOOLS).then(success => loggerInfo(success));
     await installerPromisify(REACT_PERF).then(success => loggerInfo(success));
