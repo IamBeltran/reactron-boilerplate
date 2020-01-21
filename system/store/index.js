@@ -122,16 +122,19 @@ class DataStore extends Store {
       // NOTE: returning 'this' allows method chaining
       return this;
     } catch (error) {
-      throw new StoreError('DATABASE_UPDATE');
+      throw new Error('DATABASE_UPDATE');
     }
   }
 
   // NOTE: CRUD - CREATE READ UPDATE DELETE
-  createBook(book) {
+  createBook({ title, author }) {
     try {
+      if (title === '') throw new Error('TITLE_EMPTY');
+      if (author === '') throw new Error('AUTHOR_EMPTY');
       const CREATE_BOOK = {
         id: getBsonObjectID(),
-        ...book,
+        title,
+        author,
         createAt: dateToISOString().datetime,
         updatedAt: dateToISOString().datetime,
       };
@@ -143,7 +146,7 @@ class DataStore extends Store {
       this.updateDatabase(database);
       return CREATE_BOOK;
     } catch (error) {
-      throw new StoreError('CREATE_BOOK');
+      throw new StoreError(error.mesage);
     }
   }
 
