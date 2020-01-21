@@ -22,26 +22,17 @@ const helpers = require('../helpers');
 //  │ DESTRUCTURING DEPENDENCIES.                                                       │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 const { app } = electron;
-const { getAssets } = helpers;
-const { getIcons, getPackageJSON } = getAssets;
+const {
+  getAssets: { getIcons },
+} = helpers;
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ DECLARATION OF CONSTANTS-VARIABLES.                                               │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-const packageJSONPath = getPackageJSON();
-const packageJSON = require(packageJSONPath);
-const hasVersion = !!packageJSON.version;
-const hasProductName = !!packageJSON.build.productName;
-const hasCopyright = !!packageJSON.build.copyright;
-
-const MY_APP_VERSION = '1.0.0';
-const MY_APP_NAME = 'Reactron Boilerplate';
-const MY_APP_COPYRIGHT = 'Copyright © 2014-2020 BRSoft, LLC';
-
-const APP_VERSION = hasVersion ? packageJSON.version : MY_APP_VERSION;
-const APP_NAME = hasProductName ? packageJSON.build.productName : MY_APP_NAME;
+const APP_VERSION = '1.0.0';
+const APP_NAME = 'Reactron Boilerplate';
 const APP_TEAM = 'BRSoft, LLC';
-const APP_COPYRIGHT = hasCopyright ? packageJSON.build.copyright : MY_APP_COPYRIGHT;
+const APP_COPYRIGHT = 'Copyright © 2014-2020 BRSoft, LLC';
 const USER_DATA_PATH = path.join(app.getPath('appData'), APP_NAME);
 const APP_ICON_FILE_X01 = getIcons('x01');
 const APP_ICON_FILE_X02 = getIcons('x02');
