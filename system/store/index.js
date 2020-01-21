@@ -11,11 +11,13 @@ const ObjectID = require('bson-objectid');
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ REQUIRE MY DEPENDENCIES MODULES.                                                  │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
+const configurations = require('../configurations');
 const StoreError = require('./StoreError');
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ DESTRUCTURING DEPENDENCIES.                                                       │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
+const { USER_DATA_PATH } = configurations;
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ DECLARATION OF CONSTANTS-VARIABLES.                                               │
@@ -101,7 +103,7 @@ class DataStore extends Store {
       serialize,
       schema,
       // encryptionKey,
-      // cwd: con
+      cwd: USER_DATA_PATH,
     });
     this.database = this.get('database');
   }
