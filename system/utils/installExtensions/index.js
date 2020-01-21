@@ -6,7 +6,9 @@
 const devtron = require('devtron');
 const {
   default: installExtension,
+  APOLLO_DEVELOPER_TOOLS,
   REACT_DEVELOPER_TOOLS,
+  REACT_PERF,
   REDUX_DEVTOOLS,
 } = require('electron-devtools-installer');
 
@@ -17,10 +19,14 @@ const {
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ REQUIRE MY DEPENDENCIES MODULES.                                                  │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
+const helpers = require('../../helpers');
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ DESTRUCTURING DEPENDENCIES.                                                       │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
+const {
+  loggers: { loggerInfo, loggerError },
+} = helpers;
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ DECLARATION OF CONSTANTS-VARIABLES.                                               │
@@ -34,7 +40,9 @@ const installerPromisify = extension => {
   return new Promise((resolve, reject) => {
     installExtension(extension, forceDownload)
       .then(name => resolve(`Added Extension: ${name}`))
-      .catch(err => reject(new Error(`Error installing ${extension} extension: ${err.message}`)));
+      .catch(err =>
+        reject(new Error(`Error installing ${extension.id} extension: ${err.message}`)),
+      );
   });
 };
 
@@ -43,11 +51,14 @@ const installerPromisify = extension => {
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 const installExtensions = async () => {
   try {
+    loggerInfo('Installing developer tool');
     devtron.install();
-    await installerPromisify(REACT_DEVELOPER_TOOLS).then(success => console.log(success));
-    await installerPromisify(REDUX_DEVTOOLS).then(success => console.log(success));
+    await installerPromisify(APOLLO_DEVELOPER_TOOLS).then(success => loggerInfo(success));
+    await installerPromisify(REACT_DEVELOPER_TOOLS).then(success => loggerInfo(success));
+    await installerPromisify(REACT_PERF).then(success => loggerInfo(success));
+    await installerPromisify(REDUX_DEVTOOLS).then(success => loggerInfo(success));
   } catch (error) {
-    console.error(error);
+    loggerError(error);
   }
 };
 
