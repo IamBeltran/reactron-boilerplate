@@ -11,18 +11,15 @@ const ObjectID = require('bson-objectid');
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ REQUIRE MY DEPENDENCIES MODULES.                                                  │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-const configurations = require('../configurations');
 const StoreError = require('./StoreError');
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ DESTRUCTURING DEPENDENCIES.                                                       │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-const { USER_DATA_PATH } = configurations;
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ DECLARATION OF CONSTANTS-VARIABLES.                                               │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-// const ERROR_MESSAGE = `Error: Something went wrong while saving the last record`;
 const nameStore = 'store';
 const serialize = value => JSON.stringify(value, null, 2);
 // const encryptionKey = 'oiV32mVp5lOwYneFESjrWq2xFByNOvNj';
@@ -76,7 +73,9 @@ const schema = {
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 const getBsonObjectID = () => ObjectID().toHexString();
 const dateToISOString = (date = new Date()) => {
-  const ISOString = date.toISOString();
+  const tzOffSet = date.getTimezoneOffset() * 60000;
+  const unixTime = date.getTime();
+  const ISOString = new Date(unixTime - tzOffSet).toISOString();
   const ArrayISOString = ISOString.replace('Z', '').split('T');
   return {
     datetime: ISOString,
@@ -103,7 +102,6 @@ class DataStore extends Store {
       serialize,
       schema,
       // encryptionKey,
-      cwd: USER_DATA_PATH,
     });
     this.database = this.get('database');
   }
