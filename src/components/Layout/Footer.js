@@ -1,7 +1,13 @@
 // ▶ Import react dependecies
-import React from 'react';
+import React, { useState } from 'react';
 
 // ▶ Import components
+import CreateBook from '../CreateBook';
+import ReadBooks from '../ReadBooks';
+
+// ▶ Import containers
+import Portal01 from '../../containers/Portal01';
+import Portal02 from '../../containers/Portal02';
 
 // ▶ Import Electron
 const {
@@ -9,11 +15,26 @@ const {
 } = window;
 
 const Footer = () => {
+  const [isOpenPortal01, setIsOpenPortal01] = useState(false);
+  const [isOpenPortal02, setIsOpenPortal02] = useState(false);
   const date = new Date();
   const year = date.getFullYear();
 
-  const openModal01 = () => {};
-  const openModal02 = () => {};
+  const onOpenPortal01 = () => {
+    setIsOpenPortal01(true);
+  };
+
+  const onClosePortal01 = () => {
+    setIsOpenPortal01(false);
+  };
+
+  const onOpenPortal02 = () => {
+    setIsOpenPortal02(true);
+  };
+
+  const onClosePortal02 = () => {
+    setIsOpenPortal02(false);
+  };
 
   const sendInfoNotification = () => {
     ipcRenderer.send('send-info-notification', {
@@ -41,14 +62,24 @@ const Footer = () => {
 
   return (
     <footer id="footer-wrapper" className="">
+      {isOpenPortal01 && (
+        <Portal01>
+          <CreateBook onClosePortal01={onClosePortal01} />
+        </Portal01>
+      )}
+      {isOpenPortal02 && (
+        <Portal02>
+          <ReadBooks onClosePortal02={onClosePortal02} />
+        </Portal02>
+      )}
       <div id="copyright">© Copyright {year} All rights reserved.</div>
-      <div id="modals">
-        <div>Modals:</div>
-        <button type="button" className="btn btn-light" onClick={openModal01}>
-          Modal 01
+      <div id="portals">
+        <div>Portals:</div>
+        <button type="button" className="btn btn-light" onClick={onOpenPortal01}>
+          Portal 01
         </button>
-        <button type="button" className="btn btn-light" onClick={openModal02}>
-          Modal 02
+        <button type="button" className="btn btn-light" onClick={onOpenPortal02}>
+          Portal 02
         </button>
       </div>
       <div id="notifications">
