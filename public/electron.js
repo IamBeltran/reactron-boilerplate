@@ -4,6 +4,7 @@
 //  │ REQUIRE THIRDPARTY DEPENDENCIES MODULES.                                          │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 const isDevelopment = require('electron-is-dev');
+const graphqlTransportElectron = require('graphql-transport-electron');
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ REQUIRE NODEJS DEPENDENCIES MODULE.                                               │
@@ -34,7 +35,7 @@ const webcontextPath = path.join(__dirname, '..', 'system', 'node-integration.js
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ PATH MY DEPENDENCIES MODULES.                                                     │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-
+const graphQLPath = path.join(__dirname, '..', 'system', 'graphQL');
 const helpersPath = path.join(__dirname, '..', 'system', 'helpers');
 const storePath = path.join(__dirname, '..', 'system', 'store');
 const utilsPath = path.join(__dirname, '..', 'system', 'utils');
@@ -42,6 +43,7 @@ const utilsPath = path.join(__dirname, '..', 'system', 'utils');
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ REQUIRE MY DEPENDENCIES MODULES.                                                  │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
+const graphQL = require(graphQLPath);
 const helpers = require(helpersPath);
 const store = require(storePath);
 const utils = require(utilsPath);
@@ -49,7 +51,8 @@ const utils = require(utilsPath);
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ DESTRUCTURING DEPENDENCIES.                                                       │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-
+const { schema, rootValue } = graphQL;
+const { createSchemaLink, createIpcExecutor } = graphqlTransportElectron;
 const {
   loggers: { loggerInfo, loggerWithLabel },
 } = helpers;
@@ -238,3 +241,22 @@ ipcMain.on('send-create-book', (event, book) => {
       event.reply('create-book-reply-error', err.message);
     });
 });
+
+//  ┌───────────────────────────────────────────────────────────────────────────────────┐
+//  │ SET GRAPHQL                                                                       │
+//  └───────────────────────────────────────────────────────────────────────────────────┘
+const link = createSchemaLink({
+  schema,
+  root: rootValue,
+  context: async context => {
+    // Context: variables,extensions,operationName,query
+    loggerInfo(`Context:\n${Object.keys(context)}`);
+    // console.log(`Context:\n${JSON.stringify(context, null, 2)}`);
+    // return integrationContext;
+  },
+});
+
+// link: ApolloLink;
+// ipc: IpcMain;
+// channel?: string;
+createIpcExecutor({ link, ipc: ipcMain, channel: 'graphql' });
