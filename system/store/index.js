@@ -229,6 +229,11 @@ class DataStore extends Store {
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 const store = new DataStore();
 
+// NOTE: the callback is (newValue, oldValue)
+// store.onDidChange('database.books', () => {
+//   loggerWithLabel('Success', 'Update books in store');
+// });
+
 const createBook = book => {
   return new Promise((resolve, reject) => {
     try {
@@ -293,10 +298,3 @@ STORE.readBooks = readBooks;
 STORE.readBookById = readBookById;
 STORE.updateBookById = updateBookById;
 STORE.deleteBookById = deleteBookById;
-
-// loggerWithLabel('Store Path', store.path);
-
-// // NOTE: the callback is (newValue, oldValue)
-// store.onDidChange('database.books', () => {
-//   loggerWithLabel('Success', 'Update books in store');
-// });
