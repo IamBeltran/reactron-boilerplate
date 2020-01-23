@@ -78,7 +78,7 @@ const getBsonObjectID = () => ObjectID().toHexString();
  * @name          dateToISOString
  * @description   Function that return a object with date information
  * @param         {Date} date - Date for return of the object with date information
- * @returns       {Object} - Date information
+ * @returns       {{ datetime: string, date: string, time: string }} ISOString - Date information
  */
 const dateToISOString = (date = new Date()) => {
   const tzOffSet = date.getTimezoneOffset() * 60000;
@@ -127,6 +127,20 @@ class DataStore extends Store {
     }
   }
 
+  /**
+   *
+   *
+   * @param {*} [{ title = '', author = '' }={}]
+   * @returns
+
+   */
+  /**
+   * @name          createBook
+   * @description   Function that return a object with date information
+   * @param         {*} [{ title = '', author = '' }={}]
+   * @returns       {Book} - Date information
+   * @memberof DataStore
+   */
   createBook({ title = '', author = '' } = {}) {
     try {
       const hasTitle = !!title;
