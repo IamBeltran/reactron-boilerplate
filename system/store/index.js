@@ -71,6 +71,12 @@ const schema = {
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ DECLARATION OF AUXILIARY FUNCTIONS.                                               │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
+/**
+ * @author        Victor Giovanni Beltrán Rodríguez
+ * @name          getBsonObjectID
+ * @description   Function that return a string BsonObjectID
+ * @returns       {string} BsonObject - Date information
+ */
 const getBsonObjectID = () => ObjectID().toHexString();
 
 /**
