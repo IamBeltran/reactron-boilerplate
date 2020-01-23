@@ -43,7 +43,7 @@ const utilsPath = path.join(__dirname, '..', 'system', 'utils');
 //  │ REQUIRE MY DEPENDENCIES MODULES.                                                  │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 const helpers = require(helpersPath);
-const Store = require(storePath);
+const store = require(storePath);
 const utils = require(utilsPath);
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
@@ -141,21 +141,22 @@ function createWindow() {
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 if (isDevelopment) {
   loggerInfo('Starting electron application');
-  loggerWithLabel('      Home', app.getPath('home'));
-  loggerWithLabel('  App Data', app.getPath('appData'));
-  loggerWithLabel(' User Data', app.getPath('userData'));
-  loggerWithLabel('     Cache', app.getPath('cache'));
-  loggerWithLabel('      Temp', app.getPath('temp'));
-  loggerWithLabel('       Exe', app.getPath('exe'));
-  loggerWithLabel('    Module', app.getPath('module'));
-  loggerWithLabel('   Desktop', app.getPath('desktop'));
-  loggerWithLabel(' Documents', app.getPath('documents'));
-  loggerWithLabel(' Downloads', app.getPath('downloads'));
-  loggerWithLabel('     Music', app.getPath('music'));
-  loggerWithLabel('  Pictures', app.getPath('pictures'));
-  loggerWithLabel('    Videos', app.getPath('videos'));
-  loggerWithLabel('      Logs', app.getPath('logs'));
-  loggerWithLabel('  App Path', app.getAppPath());
+  loggerWithLabel('       Home', app.getPath('home'));
+  loggerWithLabel('   App Data', app.getPath('appData'));
+  loggerWithLabel('  User Data', app.getPath('userData'));
+  loggerWithLabel('      Cache', app.getPath('cache'));
+  loggerWithLabel('       Temp', app.getPath('temp'));
+  loggerWithLabel('        Exe', app.getPath('exe'));
+  loggerWithLabel('     Module', app.getPath('module'));
+  loggerWithLabel('    Desktop', app.getPath('desktop'));
+  loggerWithLabel('  Documents', app.getPath('documents'));
+  loggerWithLabel('  Downloads', app.getPath('downloads'));
+  loggerWithLabel('      Music', app.getPath('music'));
+  loggerWithLabel('   Pictures', app.getPath('pictures'));
+  loggerWithLabel('     Videos', app.getPath('videos'));
+  loggerWithLabel('       Logs', app.getPath('logs'));
+  loggerWithLabel('   App Path', app.getAppPath());
+  loggerWithLabel(' Store Path', store.path);
   // loggerWithLabel('FlashSystem', app.getPath('pepperFlashSystemPlugin'));
 }
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
@@ -226,39 +227,14 @@ ipcMain.on('send-error-notification', (event, notification) => {
   });
 });
 
-//  ┌───────────────────────────────────────────────────────────────────────────────────┐
-//  │ STORE                                                                             │
-//  └───────────────────────────────────────────────────────────────────────────────────┘
-const store = new Store();
-loggerWithLabel('Store Path', store.path);
-// const createBook = book => store.createBook(book);
-// const readBooks = () => store.readBooks();
-// const readBookById = id => store.readBookById(id);
-// const updateBookById = id => store.updateBookById(id);
-// const deleteBookById = id => store.deleteBookById(id);
-
-// const books = [
-//   { title: 'Parque Jurasico', author: 'Michael Crichton' },
-//   { title: 'Harry Potter y la camara secreta', author: 'J.K. Rowling' },
-//   { title: 'Rayuela', author: 'Julio Cortazar' },
-//   { title: 'Las almas muertas', author: 'Nicolai Gogol' },
-//   { title: 'La comedia humana', author: 'Honoré de Balzac' },
-//   { title: 'Cumbres borrascosas', author: 'Emily Brontë' },
-//   { title: 'Luces de bohemia', author: 'Ramón del Valle-Inclán' },
-//   { title: 'La casa de los espíritus', author: 'Isabel Allende' },
-//   { title: 'Preludio a la fundación', author: 'Isaac Asimov' },
-//   { title: 'La muerte de Artemio Cruz', author: 'Carlos Fuentes' },
-//   { title: 'Fahrenheit 451', author: 'Ray Bradbury' },
-//   { title: 'El Buscón', author: 'Francisco de Quevedo' },
-//   { title: 'Drácula', author: 'Bram Stroker' },
-//   { title: 'Cuentos', author: 'Antón Chéjov' },
-//   { title: 'Trópico de cáncer', author: 'Henry Miller' },
-//   { title: 'Crimen y castigo', author: 'Fedor Dostoievski' },
-//   { title: '100 años de Soledad', author: 'Gabriel García Márquez' },
-//   { title: '2666', author: 'Roberto Bolaño' },
-//   { title: 'Ulises', author: 'James Joyce' },
-//   { title: 'Las aventuras de Huckelberry Finn', author: 'Mark Twain' },
-//   { title: 'Príncipes de Maine', author: 'John Irving' },
-// ];
-
-// books.map(book => createBook(book));
+// » SEND-ERROR-NOTIFICATION
+ipcMain.on('send-create-book', (event, book) => {
+  store
+    .createBook(book)
+    .then(() => {
+      event.reply('create-book-reply-success', 'Book Saved');
+    })
+    .catch(err => {
+      event.reply('create-book-reply-error', err.message);
+    });
+});
