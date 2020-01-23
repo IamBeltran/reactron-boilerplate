@@ -93,8 +93,9 @@ const dateToISOString = (date = new Date()) => {
 };
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
-//  │ SET MAIN MODULE - [NAME-MODULE].                                                  │
+//  │ SET MAIN MODULE - DataStore.                                                      │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
+// NOTE: CRUD - CREATE READ UPDATE DELETE
 /**
  * @author        Victor Giovanni Beltrán Rodríguez
  * @version       2.0.0
@@ -114,7 +115,7 @@ class DataStore extends Store {
     this.database = this.get('database');
   }
 
-  updateDatabase(database) {
+  updateDatabase(database, operation) {
     try {
       // NOTE: save database to JSON file
       this.set('database', database);
@@ -122,15 +123,17 @@ class DataStore extends Store {
       // NOTE: returning 'this' allows method chaining
       return this;
     } catch (error) {
-      throw new Error('DATABASE_UPDATE');
+      throw new Error(`${operation}_BOOK`);
     }
   }
 
-  // NOTE: CRUD - CREATE READ UPDATE DELETE
-  createBook({ title, author }) {
+  createBook({ title = '', author = '' } = {}) {
     try {
-      if (title === '') throw new Error('TITLE_EMPTY');
-      if (author === '') throw new Error('AUTHOR_EMPTY');
+      const hasTitle = !!title;
+      const hasAuthor = !!author;
+      if (!hasTitle && !hasAuthor) throw new Error('EMPTY_VALUES_CREATEBOOK');
+      if (!hasTitle) throw new Error('TITLE_EMPTY');
+      if (!hasAuthor) throw new Error('AUTHOR_EMPTY');
       const CREATE_BOOK = {
         id: getBsonObjectID(),
         title,
@@ -143,33 +146,49 @@ class DataStore extends Store {
         ...this.database,
         books: [...books, CREATE_BOOK],
       };
-      this.updateDatabase(database);
+      this.updateDatabase(database, 'CREATE');
       return CREATE_BOOK;
     } catch (error) {
-      throw new StoreError(error.mesage);
+      throw new StoreError(error.message);
     }
   }
 
   readBooks() {
-    return this.database.books;
+    try {
+      return this.database.books;
+    } catch (error) {
+      return new StoreError('READ_BOOKS');
+    }
   }
 
   readBookById(id) {
-    const { books } = this.database;
-    const bookExists = books.findIndex(book => book.id === id) !== -1;
-    if (!bookExists) {
-      throw new StoreError('NO_BOOK_FOUND');
-    }
-    return books.filter(book => book.id === id);
-  }
-
-  updateBookById({ id, title, author }) {
     try {
+      const hasId = !!id;
+      if (!hasId) throw new Error('ID_EMPTY');
       const { books } = this.database;
       const bookExists = books.findIndex(book => book.id === id) !== -1;
-      if (!bookExists) {
-        throw new Error(`no book exists with id ${id}`);
-      }
+      if (!bookExists) throw new Error('INVALID_ID_BOOK');
+      return books.filter(book => book.id === id);
+    } catch (error) {
+      throw new StoreError(error.message);
+    }
+  }
+
+  updateBookById({ id = '', title = '', author = '' } = {}) {
+    try {
+      const hasId = !!id;
+      const hasTitle = !!title;
+      const hasAuthor = !!author;
+      if (!hasId && !hasTitle && !hasAuthor) throw new Error('EMPTY_VALUES_UPDATEBOOKBYID');
+      if (!hasId && !hasTitle && hasAuthor) throw new Error('ONLY_AUTHOR');
+      if (!hasId && hasTitle && !hasAuthor) throw new Error('ONLY_TITLE');
+      if (hasId && !hasTitle && !hasAuthor) throw new Error('ONLY_ID');
+      if (!hasId) throw new Error('ID_EMPTY');
+      if (!hasTitle) throw new Error('TITLE_EMPTY');
+      if (!hasAuthor) throw new Error('AUTHOR_EMPTY');
+      const { books } = this.database;
+      const bookExists = books.findIndex(book => book.id === id) !== -1;
+      if (!bookExists) throw new Error('INVALID_ID_BOOK');
       const bookIndex = books.findIndex(book => book.id === id);
       books[bookIndex].title = title;
       books[bookIndex].author = author;
@@ -178,32 +197,106 @@ class DataStore extends Store {
         ...this.database,
         books,
       };
-      this.updateDatabase(database);
+      this.updateDatabase(database, 'UPDATE');
       return books[bookIndex];
     } catch (error) {
-      throw new Error('ERROR IN DELETE BOOK');
+      throw new StoreError(error.message);
     }
   }
 
   deleteBookById(id) {
     try {
+      const hasId = !!id;
+      if (!hasId) throw new Error('ID_EMPTY');
       const { books } = this.database;
       const bookExists = books.findIndex(book => book.id === id) !== -1;
-      if (!bookExists) {
-        throw new StoreError('NO_BOOK_FOUND');
-      }
+      if (!bookExists) throw new Error('INVALID_ID_BOOK');
       const NEW_BOOKS = books.filter(book => book.id !== id);
       const database = {
         ...this.database,
         books: NEW_BOOKS,
       };
-      this.updateDatabase(database);
+      this.updateDatabase(database, 'DELETE');
       return this.database.books;
     } catch (error) {
-      throw new StoreError('DELETE_BOOK');
+      throw new StoreError(error.message);
     }
   }
 }
 
+//  ┌───────────────────────────────────────────────────────────────────────────────────┐
+//  │ STORE.                                                                            │
+//  └───────────────────────────────────────────────────────────────────────────────────┘
+const store = new DataStore();
+
+const createBook = book => {
+  return new Promise((resolve, reject) => {
+    try {
+      const createdBook = store.createBook(book);
+      return resolve(createdBook);
+    } catch (error) {
+      return reject(error.message);
+    }
+  });
+};
+
+const readBooks = () => {
+  return new Promise((resolve, reject) => {
+    try {
+      const books = store.readBooks();
+      return resolve(books);
+    } catch (error) {
+      return reject(error.message);
+    }
+  });
+};
+
+const readBookById = id => {
+  return new Promise((resolve, reject) => {
+    try {
+      const book = store.readBookById(id);
+      return resolve(book);
+    } catch (error) {
+      return reject(error.message);
+    }
+  });
+};
+
+const updateBookById = book => {
+  return new Promise((resolve, reject) => {
+    try {
+      const updated = store.updateBookById(book);
+      return resolve(updated);
+    } catch (error) {
+      return reject(error.message);
+    }
+  });
+};
+
+const deleteBookById = id => {
+  return new Promise((resolve, reject) => {
+    try {
+      const books = store.deleteBookById(id);
+      return resolve(books);
+    } catch (error) {
+      return reject(error.message);
+    }
+  });
+};
+
 //  ──[ EXPORT MODULE ]──────────────────────────────────────────────────────────────────
-module.exports = DataStore;
+const STORE = (module.exports = exports = {}); // eslint-disable-line no-multi-assign
+
+STORE.path = store.path;
+STORE.createBook = createBook;
+STORE.readBooks = readBooks;
+STORE.readBookById = readBookById;
+STORE.updateBookById = updateBookById;
+STORE.deleteBookById = deleteBookById;
+
+// loggerWithLabel('Store Path', store.path);
+
+// // NOTE: the callback is (newValue, oldValue)
+// store.onDidChange('database.books', () => {
+//   loggerWithLabel('Success', 'Update books in store');
+// });
