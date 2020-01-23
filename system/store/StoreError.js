@@ -18,13 +18,25 @@
 //  │ DECLARATION OF CONSTANTS-VARIABLES.                                               │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 const storeErrors = {
-  DATABASE_UPDATE: 'Error in database update',
-  NO_BOOK_FOUND: 'Error, no book found with that id',
+  // SECTION: OPERATIONS
   CREATE_BOOK: 'Error to create book',
-  READ_BOOKS: 'Error to read books',
-  READ_BOOK: 'Error to read book with that id',
   UPDATE_BOOK: 'Error to update book',
   DELETE_BOOK: 'Error to delete book',
+  READ_BOOKS: 'Error to read books',
+  READ_BOOK: 'Error to read book with that id',
+  // !SECTION
+
+  // SECTION: PARAMS
+  INVALID_ID_BOOK: 'Error, no book found with that id',
+  EMPTY_VALUES_CREATEBOOK: 'Error, require author and title',
+  EMPTY_VALUES_UPDATEBOOKBYID: 'Error, require id book, author and title',
+  ONLY_AUTHOR: 'Error, require id book and title',
+  ONLY_TITLE: 'Error, require id book and author',
+  ONLY_ID: 'Error, require author and title',
+  ID_EMPTY: 'Error, require id Book',
+  AUTHOR_EMPTY: 'Error, require author',
+  TITLE_EMPTY: 'Error, require title',
+  // !SECTION
 };
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
