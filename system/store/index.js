@@ -133,20 +133,6 @@ class DataStore extends Store {
     }
   }
 
-  /**
-   *
-   *
-   * @param {*} [{ title = '', author = '' }={}]
-   * @returns
-
-   */
-  /**
-   * @name          createBook
-   * @description   Function that return a object with date information
-   * @param         {*} [{ title = '', author = '' }={}]
-   * @returns       {Book} - Date information
-   * @memberof DataStore
-   */
   createBook({ title = '', author = '' } = {}) {
     try {
       const hasTitle = !!title;
@@ -260,7 +246,7 @@ const createBook = book => {
       const createdBook = store.createBook(book);
       return resolve(createdBook);
     } catch (error) {
-      return reject(error.message);
+      return reject(error);
     }
   });
 };
@@ -271,7 +257,7 @@ const readBooks = () => {
       const books = store.readBooks();
       return resolve(books);
     } catch (error) {
-      return reject(error.message);
+      return reject(error);
     }
   });
 };
@@ -280,9 +266,9 @@ const readBookById = id => {
   return new Promise((resolve, reject) => {
     try {
       const book = store.readBookById(id);
-      return resolve(book);
+      return resolve(book[0]);
     } catch (error) {
-      return reject(error.message);
+      return reject(error);
     }
   });
 };
@@ -293,7 +279,7 @@ const updateBookById = book => {
       const updated = store.updateBookById(book);
       return resolve(updated);
     } catch (error) {
-      return reject(error.message);
+      return reject(error);
     }
   });
 };
@@ -304,7 +290,7 @@ const deleteBookById = id => {
       const books = store.deleteBookById(id);
       return resolve(books);
     } catch (error) {
-      return reject(error.message);
+      return reject(error);
     }
   });
 };
