@@ -42,12 +42,12 @@ const { createBook, readBooks, readBookById, updateBookById, deleteBookById } = 
 const rootValue = {
   createBook: async ({ input }) => {
     return createBook(input)
-      .then(book => book[0])
+      .then(book => book)
       .catch(err => err);
   },
   books: async () => {
     return readBooks()
-      .then(book => book[0])
+      .then(book => book)
       .catch(err => err);
   },
   getBook: async ({ id }) => {
@@ -57,12 +57,12 @@ const rootValue = {
   },
   updateBook: async ({ input }) => {
     return updateBookById(input)
-      .then(book => book[0])
+      .then(book => book)
       .catch(err => err);
   },
   deleteBook: async ({ id }) => {
     return deleteBookById(id)
-      .then(book => book[0])
+      .then(books => books)
       .catch(err => err);
   },
 };
