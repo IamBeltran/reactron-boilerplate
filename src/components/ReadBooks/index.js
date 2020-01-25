@@ -3,12 +3,38 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 // ▶ Import components
-import books from './book.dummy';
+import { gql } from 'apollo-boost';
+import { useQuery } from '@apollo/react-hooks';
+
 // ▶ Import css file
 import './ReadBooks.css';
 
+const GET_BOOKS = gql`
+  {
+    books {
+      id
+      title
+      author
+    }
+  }
+`;
+
+const sortedBy = value => (a, b) => {
+  if (a[`${value}`] > b[`${value}`]) {
+    return 1;
+  }
+  if (b[`${value}`] > a[`${value}`]) {
+    return -1;
+  }
+  return 0;
+};
+
 const ReadBooks = props => {
   const { onClosePortal02 } = props;
+  const { loading, error, data } = useQuery(GET_BOOKS);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{`Error: ${error}`}</p>;
   return (
     <div id="read-books">
       <div id="modal-control">
@@ -27,7 +53,7 @@ const ReadBooks = props => {
               </tr>
             </thead>
             <tbody>
-              {books.map(({ id, title, author }) => (
+              {data.books.sort(sortedBy('title')).map(({ id, title, author }) => (
                 <tr key={id}>
                   <td>{title}</td>
                   <td>{author}</td>

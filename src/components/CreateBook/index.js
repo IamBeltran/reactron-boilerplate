@@ -1,5 +1,5 @@
 // ▶ Import react dependecies
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 // ▶ Import components
@@ -7,45 +7,69 @@ import PropTypes from 'prop-types';
 // ▶ Import css file
 import './CreateBook.css';
 
-// ▶ Import Electron
-const {
-  electron: { ipcRenderer },
-} = window;
+// ▶ Import Apollo modules
+import { gql } from 'apollo-boost';
+import { useMutation } from '@apollo/react-hooks';
+
+const GET_BOOKS = gql`
+  {
+    books {
+      id
+      title
+      author
+    }
+  }
+`;
+
+const CREATE_BOOK = gql`
+  mutation CreateBook($input: CreateBookInput) {
+    createBook(input: $input) {
+      id
+      title
+      author
+    }
+  }
+`;
+
+const updateCache = (cache, { data }) => {
+  const existingBooks = cache.readQuery({
+    query: GET_BOOKS,
+  });
+  const NEW_BOOK = data.createBook;
+
+  cache.writeQuery({
+    query: GET_BOOKS,
+    data: { books: [...existingBooks.books, NEW_BOOK] },
+  });
+};
 
 const CreateBook = props => {
   const { onClosePortal01 } = props;
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState(false);
+  // const [error, setError] = useState(false);
 
   const resetInputs = () => {
     setTitle('');
     setAuthor('');
   };
 
+  const [createBook] = useMutation(CREATE_BOOK, { update: updateCache, onCompleted: resetInputs });
+
   const onSubmit = event => {
     event.preventDefault();
-    ipcRenderer.send('send-create-book', { title, author });
+    createBook({
+      variables: {
+        input: {
+          title,
+          author,
+        },
+      },
+    });
+    setSuccess('Created Book');
+    setTimeout(() => setSuccess(false), 1500);
   };
-
-  useEffect(() => {
-    ipcRenderer.on('create-book-reply-success', (event, listener) => {
-      resetInputs();
-      setSuccess(listener);
-      setTimeout(() => setSuccess(false), 1500);
-    });
-    return () => ipcRenderer.removeAllListeners(['create-book-reply-success']);
-  }, [success]);
-
-  useEffect(() => {
-    ipcRenderer.on('create-book-reply-error', (event, listener) => {
-      resetInputs();
-      setError(listener);
-      setTimeout(() => setError(false), 1500);
-    });
-    return () => ipcRenderer.removeAllListeners(['create-book-reply-error']);
-  }, [error]);
 
   const isDisabled = author === '' || title === '';
 
@@ -93,8 +117,8 @@ const CreateBook = props => {
         </form>
       </div>
       <div id="alert-wrapper">
-        {/* <div className="error-wrapper contrast">Soy error</div> */}
-        {error && <div className="error-wrapper">{error}</div>}
+        {/* <div className="error-wrapper contrast">Soy error</div>
+        {error && <div className="error-wrapper">{error}</div>} */}
         {success && <div className="success-wrapper">{success}</div>}
       </div>
     </div>
