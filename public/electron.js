@@ -35,7 +35,7 @@ const webcontextPath = path.join(__dirname, '..', 'system', 'node-integration.js
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ PATH MY DEPENDENCIES MODULES.                                                     │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-const graphQLPath = path.join(__dirname, '..', 'system', 'graphQL');
+const graphqlPath = path.join(__dirname, '..', 'system', 'graphql');
 const helpersPath = path.join(__dirname, '..', 'system', 'helpers');
 const storePath = path.join(__dirname, '..', 'system', 'store');
 const utilsPath = path.join(__dirname, '..', 'system', 'utils');
@@ -43,7 +43,7 @@ const utilsPath = path.join(__dirname, '..', 'system', 'utils');
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ REQUIRE MY DEPENDENCIES MODULES.                                                  │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-const graphQL = require(graphQLPath);
+const graphql = require(graphqlPath);
 const helpers = require(helpersPath);
 const store = require(storePath);
 const utils = require(utilsPath);
@@ -51,7 +51,7 @@ const utils = require(utilsPath);
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ DESTRUCTURING DEPENDENCIES.                                                       │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-const { schema, rootValue } = graphQL;
+const { schema, rootValue } = graphql;
 const { createSchemaLink, createIpcExecutor } = graphqlTransportElectron;
 const {
   loggers: { loggerInfo, loggerWithLabel },
@@ -245,12 +245,16 @@ ipcMain.on('send-create-book', (event, book) => {
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ SET GRAPHQL                                                                       │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
+// schema: GraphQLSchema;
+// root?: any;
+// context?: any;
 const link = createSchemaLink({
   schema,
   root: rootValue,
-  context: async context => {
-    // Context: variables,extensions,operationName,query
-    loggerInfo(`Context:\n${Object.keys(context)}`);
+  // NOTE Context: variables, extensions, operationName, query
+  context: async () => {
+    // async context => {
+    // loggerInfo(`Context:\n${Object.keys(context)}`);
     // console.log(`Context:\n${JSON.stringify(context, null, 2)}`);
     // return integrationContext;
   },
