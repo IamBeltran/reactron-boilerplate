@@ -39,7 +39,7 @@ div#modal-control button.btn-modal {
 .scrollable {
   flex: 1 1 auto;
   overflow-y: auto;
-  height: 365px;
+  height: 370px;
 }
 
 table.table-control {
