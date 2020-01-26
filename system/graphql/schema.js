@@ -33,12 +33,18 @@ const schema = buildSchema(`
   input CreateBookInput {
     title: String!
     author: String!
+    year: Int,
+    country: String!
+    language: String!
   }
 
   input UpdateBookInput {
     id: ID!
     title: String!
     author: String!
+    year: Int,
+    country: String!
+    language: String!
   }
 
   input DeleteBookInput {
@@ -60,7 +66,7 @@ const schema = buildSchema(`
   }
   # !SECTION
 
-  # SECTION: TYPE OUTPUTS
+  # SECTION: CUSTOM SCALAR
   # This "Book" type can be used in other type declarations.
   type Book {
     id: ID!
@@ -74,8 +80,9 @@ const schema = buildSchema(`
     name: String!
     message: String!
   }
+  # !SECTION
 
-  # SECTION: QUERY
+  # SECTION: QUERYS
   type Query {
     books: [Book]
     getBook(id: ID!): Book
@@ -89,6 +96,7 @@ const schema = buildSchema(`
     deleteBook(input: DeleteBookInput): [Book]
   }
   # !SECTION
+
 `);
 
 //  ──[ EXPORT MODULE ]──────────────────────────────────────────────────────────────────
