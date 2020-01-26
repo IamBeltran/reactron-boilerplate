@@ -331,11 +331,11 @@ const deleteBookById = id => {
 };
 
 //  ──[ EXPORT MODULE ]──────────────────────────────────────────────────────────────────
-const STORE = (module.exports = exports = {}); // eslint-disable-line no-multi-assign
+const database = (module.exports = exports = {}); // eslint-disable-line no-multi-assign
 
-STORE.path = store.path;
-STORE.createBook = createBook;
-STORE.readBooks = readBooks;
-STORE.readBookById = readBookById;
-STORE.updateBookById = updateBookById;
-STORE.deleteBookById = deleteBookById;
+database.path = store.path;
+database.createBook = createBook;
+database.readBooks = readBooks;
+database.readBookById = readBookById;
+database.updateBookById = updateBookById;
+database.deleteBookById = deleteBookById;
