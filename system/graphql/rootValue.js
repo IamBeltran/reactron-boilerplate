@@ -9,27 +9,29 @@
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ REQUIRE MY DEPENDENCIES MODULES.                                                  │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-const store = require('../store');
+const database = require('../store');
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ DESTRUCTURING DEPENDENCIES.                                                       │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-const { createBook, readBooks, readBookById, updateBookById, deleteBookById } = store;
+const { createBook, readBooks, readBookById, updateBookById, deleteBookById } = database;
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ DECLARATION OF CONSTANTS-VARIABLES.                                               │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
+// const bookProperties = ['id', 'title', 'author', 'year', 'country', 'language'];
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ DECLARATION OF AUXILIARY FUNCTIONS.                                               │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
+// const isValidProperties = propertie => bookProperties.includes(propertie);
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ SET MAIN MODULE - [NAME-MODULE].                                                  │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 /**
  *  NOTE: Resolvers
- *        fieldName:  (parent, args, context, info) => data;
+ *         resolver:  (parent, args, context, info) => data;
  *           parent:  An object that contains  the result returned from the  resolver  on
  *                    the parent type.
  *             args:  An object that contains the arguments passed to the field
@@ -47,7 +49,7 @@ const rootValue = {
   },
   books: async () => {
     return readBooks()
-      .then(book => book)
+      .then(books => books)
       .catch(err => err);
   },
   getBook: async ({ id }) => {
