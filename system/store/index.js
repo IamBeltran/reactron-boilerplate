@@ -43,6 +43,15 @@ const bookShema = {
       author: {
         type: 'string',
       },
+      year: {
+        type: 'number',
+      },
+      country: {
+        type: 'string',
+      },
+      language: {
+        type: 'string',
+      },
       createAt: {
         type: 'string',
         format: 'date-time',
@@ -53,7 +62,7 @@ const bookShema = {
       },
     },
     additionalProperties: false,
-    required: ['id', 'title', 'author', 'createAt', 'updatedAt'],
+    required: ['id', 'title', 'author', 'year', 'country', 'language', 'createAt', 'updatedAt'],
   },
 };
 
@@ -133,17 +142,27 @@ class DataStore extends Store {
     }
   }
 
-  createBook({ title = '', author = '' } = {}) {
+  createBook({ title = '', author = '', year = '', country = '', language = '' } = {}) {
     try {
       const hasTitle = !!title;
       const hasAuthor = !!author;
+      const hasYear = !!year;
+      const hasCountry = !!country;
+      const hasLanguage = !!language;
       if (!hasTitle && !hasAuthor) throw new Error('EMPTY_VALUES_CREATEBOOK');
       if (!hasTitle) throw new Error('TITLE_EMPTY');
       if (!hasAuthor) throw new Error('AUTHOR_EMPTY');
+      if (!hasYear) throw new Error('YEAR_EMPTY');
+      if (!hasCountry) throw new Error('COUNTRY_EMPTY');
+      if (!hasLanguage) throw new Error('LANGUAGE_EMPTY');
+
       const CREATE_BOOK = {
         id: getBsonObjectID(),
         title,
         author,
+        year,
+        country,
+        language,
         createAt: dateToISOString().datetime,
         updatedAt: dateToISOString().datetime,
       };
@@ -180,24 +199,40 @@ class DataStore extends Store {
     }
   }
 
-  updateBookById({ id = '', title = '', author = '' } = {}) {
+  updateBookById({
+    id = '',
+    title = '',
+    author = '',
+    year = '',
+    country = '',
+    language = '',
+  } = {}) {
     try {
       const hasId = !!id;
       const hasTitle = !!title;
       const hasAuthor = !!author;
-      if (!hasId && !hasTitle && !hasAuthor) throw new Error('EMPTY_VALUES_UPDATEBOOKBYID');
-      if (!hasId && !hasTitle && hasAuthor) throw new Error('ONLY_AUTHOR');
-      if (!hasId && hasTitle && !hasAuthor) throw new Error('ONLY_TITLE');
-      if (hasId && !hasTitle && !hasAuthor) throw new Error('ONLY_ID');
+      const hasYear = !!year;
+      const hasCountry = !!country;
+      const hasLanguage = !!language;
+      if (!hasId && !hasTitle && !hasAuthor && !hasYear && !hasCountry && !hasLanguage) {
+        throw new Error('EMPTY_VALUES_UPDATEBOOKBYID');
+      }
       if (!hasId) throw new Error('ID_EMPTY');
       if (!hasTitle) throw new Error('TITLE_EMPTY');
       if (!hasAuthor) throw new Error('AUTHOR_EMPTY');
+      if (!hasYear) throw new Error('YEAR_EMPTY');
+      if (!hasCountry) throw new Error('COUNTRY_EMPTY');
+      if (!hasLanguage) throw new Error('LANGUAGE_EMPTY');
+
       const { books } = this.database;
       const bookExists = books.findIndex(book => book.id === id) !== -1;
       if (!bookExists) throw new Error('INVALID_ID_BOOK');
       const bookIndex = books.findIndex(book => book.id === id);
       books[bookIndex].title = title;
       books[bookIndex].author = author;
+      books[bookIndex].year = year;
+      books[bookIndex].country = country;
+      books[bookIndex].language = language;
       books[bookIndex].updatedAt = dateToISOString().datetime;
       const database = {
         ...this.database,

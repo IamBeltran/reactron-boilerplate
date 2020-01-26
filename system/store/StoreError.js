@@ -33,9 +33,12 @@ const storeErrors = {
   ONLY_AUTHOR: 'Error, require id book and title',
   ONLY_TITLE: 'Error, require id book and author',
   ONLY_ID: 'Error, require author and title',
-  ID_EMPTY: 'Error, require id Book',
-  AUTHOR_EMPTY: 'Error, require author',
-  TITLE_EMPTY: 'Error, require title',
+  ID_EMPTY: 'Error, require id Book value',
+  AUTHOR_EMPTY: 'Error, require author value',
+  TITLE_EMPTY: 'Error, require title value',
+  YEAR_EMPTY: 'Error, require year value',
+  COUNTRY_EMPTY: 'Error, require country value',
+  LANGUAGE_EMPTY: 'Error, require language value',
   // !SECTION
 };
 
