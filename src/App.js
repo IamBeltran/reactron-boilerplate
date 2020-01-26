@@ -10,21 +10,25 @@ import { ApolloProvider } from '@apollo/react-hooks';
 
 // ▶ Import components
 import Layout from './components/Layout';
-// import { AuthProvider } from './context/AuthContext'; <AuthProvider></AuthProvider>
+// import { AuthProvider } from './context/AuthContext';
+// <AuthProvider></AuthProvider>
 
-// ▶ Import css file
+// ▶ Import styles css
 
 // ▶ Import electron
 const { electron } = window;
 const { ipcRenderer } = electron;
 
-// channel?: string;
-// ipc: IpcRenderer;
+/**
+ *  NOTE: Options fot createIpcLink
+ *  channel: string
+ *  ipc: IpcRenderer
+ */
 const IpcLink = createIpcLink({ ipc: ipcRenderer });
 
 // » Create Apollo Client
 const client = new ApolloClient({
-  link: IpcLink, // link: authLink.concat(IpcLink),
+  link: IpcLink,
   cache: new InMemoryCache(),
   name: 'react-web-client',
   version: '1.3',
