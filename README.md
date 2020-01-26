@@ -3,12 +3,6 @@
 
 # Reactron boilerplate
 
-## Main Branches
-- **initial:** for initial to start any project, include linting, gulp with unit testing tasks, gulp with eslint
-- **master:** for initial a electron-react proyect
-- **only-react:** for design UI for app
-- **reactron:** for initial a electron-react proyect
-
 ## Script Tasks
 
 - **start:** `npm start` Run React
@@ -74,6 +68,8 @@ If you app (code) have new release and you want publishing follow this steps
 ## TODO LIST
 
 - [ ] Add autoupdater in main file
+- [ ] Add graphQL pagination
+- [ ] Merge all css files
 
 ## DOCUMENTATION
 
