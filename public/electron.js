@@ -45,7 +45,7 @@ const utilsPath = path.join(__dirname, '..', 'system', 'utils');
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 const graphql = require(graphqlPath);
 const helpers = require(helpersPath);
-const store = require(storePath);
+const database = require(storePath);
 const utils = require(utilsPath);
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
@@ -159,7 +159,7 @@ if (isDevelopment) {
   loggerWithLabel('     Videos', app.getPath('videos'));
   loggerWithLabel('       Logs', app.getPath('logs'));
   loggerWithLabel('   App Path', app.getAppPath());
-  loggerWithLabel(' Store Path', store.path);
+  loggerWithLabel(' Store Path', database.path);
   // loggerWithLabel('FlashSystem', app.getPath('pepperFlashSystemPlugin'));
 }
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
@@ -230,37 +230,40 @@ ipcMain.on('send-error-notification', (event, notification) => {
   });
 });
 
-// » SEND-ERROR-NOTIFICATION
-ipcMain.on('send-create-book', (event, book) => {
-  store
-    .createBook(book)
-    .then(() => {
-      event.reply('create-book-reply-success', 'Book Saved');
-    })
-    .catch(err => {
-      event.reply('create-book-reply-error', err.message);
-    });
-});
-
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ SET GRAPHQL                                                                       │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-// schema: GraphQLSchema;
-// root?: any;
-// context?: any;
+/**
+ *  NOTE: SchemaLinkOptions
+ *  schema: GraphQLSchema;
+ *  root?: any;
+ *  context?: any;
+ * */
 const link = createSchemaLink({
   schema,
   root: rootValue,
-  // NOTE Context: variables, extensions, operationName, query
-  context: async () => {
-    // async context => {
-    // loggerInfo(`Context:\n${Object.keys(context)}`);
-    // console.log(`Context:\n${JSON.stringify(context, null, 2)}`);
-    // return integrationContext;
+  /**
+   *  NOTE: Context: variables, extensions, operationName, query
+   *  Important:  The `integrationContext` argument varies depending  on  the  specific
+   *              integration  (e.g. Express, Koa, Lambda, etc.)  being  used.  See the
+   *              table below for specific signatures.
+   *
+   *  For example, using Express's  `authorization`  header,  and a  `getScope`  method
+   *  (intentionally left unspecified here):
+   *
+   * */
+  contextValue: async context => {
+    loggerInfo(`Context: ${Object.keys(context)}`);
+    return {
+      database,
+    };
   },
 });
 
-// link: ApolloLink;
-// ipc: IpcMain;
-// channel?: string;
+/**
+ *  NOTE: IpcExecutorOptions
+ *  link: ApolloLink;
+ *  ipc: IpcMain;
+ *  channel?: string;
+ * */
 createIpcExecutor({ link, ipc: ipcMain, channel: 'graphql' });
