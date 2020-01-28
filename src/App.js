@@ -20,7 +20,7 @@ const { electron } = window;
 const { ipcRenderer } = electron;
 
 /**
- *  NOTE: Options fot createIpcLink
+ *  NOTE: ApolloIpcLinkOptions
  *  channel: string
  *  ipc: IpcRenderer
  */
