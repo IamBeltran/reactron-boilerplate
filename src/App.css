@@ -94,7 +94,7 @@ main#main-wrapper img.app-logo {
 }
 
 a.app-link {
-  color: #61dafb;
+  color: #61DAFB;
 }
 
 @keyframes app-logo-spin {
@@ -296,6 +296,16 @@ div.error-wrapper {
 div.success-wrapper {
   background-color: #28a745;
   color: #ffffff;
+  padding: 5px 0px;
+  text-align: center;
+  font-size: 0.8rem;
+  border: none;
+  border-radius: 0px 0px 10px 10px;
+}
+
+div.loading-wrapper {
+  background-color: #61DAFB;
+  color: #000000;
   padding: 5px 0px;
   text-align: center;
   font-size: 0.8rem;
