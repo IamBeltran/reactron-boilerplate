@@ -6,14 +6,7 @@ import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
 
-// ▶ Import Containers
-// import { AuthProvider } from './context/AuthContext';
-// <AuthProvider></AuthProvider>
-
-// ▶ Import css file
-import './Layout.css';
-
-const App = () => {
+const Layout = () => {
   return (
     <div id="container-wrapper">
       <Header />
@@ -23,4 +16,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Layout;
