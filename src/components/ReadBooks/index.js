@@ -7,9 +7,6 @@ import PropTypes from 'prop-types';
 import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
 
-// ▶ Import dummie data
-// import books from './bookDummie';
-
 const GET_BOOKS = gql`
   query Books {
     books {
