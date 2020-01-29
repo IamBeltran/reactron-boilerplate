@@ -17,7 +17,8 @@ import PropTypes from 'prop-types';
 
 const ErrorQuery = props => {
   const { onClosePortal02, error } = props;
-
+  // console.log(Object.keys(error));
+  // console.log(JSON.stringify(error, null, 2));
   return (
     <div id="read-books">
       <div className="modal-control">
@@ -39,7 +40,7 @@ const ErrorQuery = props => {
 
 ErrorQuery.propTypes = {
   onClosePortal02: PropTypes.func.isRequired,
-  error: PropTypes.objectOf(PropTypes.string).isRequired,
+  error: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 export default ErrorQuery;
