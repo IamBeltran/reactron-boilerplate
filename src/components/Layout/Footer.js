@@ -61,7 +61,7 @@ const Footer = () => {
   };
 
   return (
-    <footer id="footer-wrapper" className="">
+    <footer id="footer-wrapper">
       {isOpenPortal01 && (
         <Portal01>
           <CreateBook onClosePortal01={onClosePortal01} />
