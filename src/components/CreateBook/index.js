@@ -9,7 +9,7 @@ import { useMutation } from '@apollo/react-hooks';
 
 // » Querie Books
 const GET_BOOKS = gql`
-  {
+  query Books {
     books {
       id
       title
