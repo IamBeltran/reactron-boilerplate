@@ -75,10 +75,10 @@ const Footer = () => {
       <div id="copyright">© Copyright {year} All rights reserved.</div>
       <div id="portals">
         <div>Portals:</div>
-        <button type="button" className="btn btn-light" onClick={onOpenPortal01}>
+        <button type="button" className="btn btn-portal" onClick={onOpenPortal01}>
           Portal 01
         </button>
-        <button type="button" className="btn btn-light" onClick={onOpenPortal02}>
+        <button type="button" className="btn btn-portal" onClick={onOpenPortal02}>
           Portal 02
         </button>
       </div>
