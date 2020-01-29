@@ -7,7 +7,7 @@ div#create-book {
   left: 10px;
   top: 10px;
   width: 40%;
-  height: 45%;
+  height: 60%;
   overflow: auto;
   background-color: rgba(255, 255, 255, 0.75);
   border-radius: 10px;
@@ -49,7 +49,7 @@ legend.legend-control {
   padding: 5px 0px;
   margin-bottom: 10px;
   text-align: center;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   border: none;
   border-radius: 10px;
 }
@@ -59,6 +59,7 @@ div.form-group {
   flex-flow: column nowrap;
   justify-content: flex-start;
   margin-bottom: 10px;
+  font-size: 0.8rem;
 }
 
 label.label-control {
@@ -79,7 +80,7 @@ span.span-control {
 
 input.input-control {
   flex: 0 1 70%;
-  border: none;
+  padding: 3px;
   border: solid 1px #282c34;
   border-radius: 0px 10px 10px 0px;
 }
