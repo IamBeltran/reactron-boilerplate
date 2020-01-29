@@ -70,7 +70,7 @@ const CreateBook = props => {
 
   const [createBook] = useMutation(CREATE_BOOK, {
     update: updateCache,
-    onError: ApolloError => setError(ApolloError),
+    onError: () => setError('Failure to created book'),
     onCompleted: resetInputs,
   });
 
