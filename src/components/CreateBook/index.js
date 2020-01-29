@@ -3,14 +3,11 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 // ▶ Import components
-
-// ▶ Import css file
-import './CreateBook.css';
-
 // ▶ Import Apollo modules
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
 
+// » Querie Books
 const GET_BOOKS = gql`
   {
     books {
@@ -21,6 +18,7 @@ const GET_BOOKS = gql`
   }
 `;
 
+// » Querie CreateBook
 const CREATE_BOOK = gql`
   mutation CreateBook($input: CreateBookInput) {
     createBook(input: $input) {
@@ -31,6 +29,7 @@ const CREATE_BOOK = gql`
   }
 `;
 
+const currentYear = new Date().getFullYear();
 const updateCache = (cache, { data }) => {
   const existingBooks = cache.readQuery({
     query: GET_BOOKS,
@@ -47,15 +46,33 @@ const CreateBook = props => {
   const { onClosePortal01 } = props;
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
+  const [year, setYear] = useState(currentYear);
+  const [country, setCountry] = useState('');
+  const [language, setLanguage] = useState('');
   const [success, setSuccess] = useState(false);
-  // const [error, setError] = useState(false);
+  const [errorQuery, setErrorQuery] = useState(false);
 
   const resetInputs = () => {
+    setSuccess('Success Created Book');
+    setTimeout(() => setSuccess(false), 1500);
     setTitle('');
     setAuthor('');
+    setYear(currentYear);
+    setCountry('');
+    setLanguage('');
   };
 
-  const [createBook] = useMutation(CREATE_BOOK, { update: updateCache, onCompleted: resetInputs });
+  const setError = err => {
+    const { message } = err;
+    setErrorQuery(message);
+    setTimeout(() => setErrorQuery(false), 1500);
+  };
+
+  const [createBook] = useMutation(CREATE_BOOK, {
+    update: updateCache,
+    onError: ApolloError => setError(ApolloError),
+    onCompleted: resetInputs,
+  });
 
   const onSubmit = event => {
     event.preventDefault();
@@ -64,29 +81,32 @@ const CreateBook = props => {
         input: {
           title,
           author,
+          year,
+          country,
+          language,
         },
       },
     });
-    setSuccess('Created Book');
-    setTimeout(() => setSuccess(false), 1500);
   };
 
-  const isDisabled = author === '' || title === '';
+  const isDisabled =
+    author === '' || title === '' || year === '' || country === '' || language === '';
 
   return (
     <div id="create-book">
-      <div id="modal-control">
+      <div className="modal-control">
         <button type="button" className="btn-modal" onClick={onClosePortal01}>
           X
         </button>
       </div>
-      <div id="main-wrapper">
+      <div className="modal-main-wrapper">
         <form onSubmit={onSubmit} className="form-add-book">
           <legend className="legend-control">AGREGA UN LIBRO</legend>
           <div className="form-group">
             <label htmlFor="title" className="label-control">
               <span className="span-control">Titulo</span>
               <input
+                type="text"
                 className="input-control"
                 name="title"
                 onChange={event => setTitle(event.target.value)}
@@ -98,6 +118,7 @@ const CreateBook = props => {
             <label htmlFor="author" className="label-control">
               <span className="span-control">Autor</span>
               <input
+                type="text"
                 className="input-control"
                 name="author"
                 onChange={event => setAuthor(event.target.value)}
@@ -105,6 +126,43 @@ const CreateBook = props => {
               />
             </label>
           </div>
+          <div className="form-group">
+            <label htmlFor="year" className="label-control">
+              <span className="span-control">Year</span>
+              <input
+                type="number"
+                className="input-control"
+                name="year"
+                onChange={event => setYear(parseInt(event.target.value, 10))}
+                value={year}
+              />
+            </label>
+          </div>
+          <div className="form-group">
+            <label htmlFor="country" className="label-control">
+              <span className="span-control">Country</span>
+              <input
+                type="text"
+                className="input-control"
+                name="country"
+                onChange={event => setCountry(event.target.value)}
+                value={country}
+              />
+            </label>
+          </div>
+          <div className="form-group">
+            <label htmlFor="language" className="label-control">
+              <span className="span-control">Language</span>
+              <input
+                type="text"
+                className="input-control"
+                name="language"
+                onChange={event => setLanguage(event.target.value)}
+                value={language}
+              />
+            </label>
+          </div>
+
           <div className="submit-control">
             <button
               type="submit"
@@ -116,9 +174,9 @@ const CreateBook = props => {
           </div>
         </form>
       </div>
-      <div id="alert-wrapper">
-        {/* <div className="error-wrapper contrast">Soy error</div>
-        {error && <div className="error-wrapper">{error}</div>} */}
+      <div className="modal-alert-wrapper">
+        {/*  <div className="error-wrapper contrast">Soy error</div> */}
+        {errorQuery && <div className="error-wrapper">{errorQuery}</div>}
         {success && <div className="success-wrapper">{success}</div>}
       </div>
     </div>
