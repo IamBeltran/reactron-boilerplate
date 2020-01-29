@@ -23,12 +23,9 @@ const GET_BOOKS = gql`
 const ReadBooks = props => {
   const { onClosePortal02 } = props;
   const { data, loading, error } = useQuery(GET_BOOKS);
-  // const [loadingQuery, setLoadingQuery] = useState(false);
-  // const [errorQuery, setErrorQuery] = useState(false);
 
   if (loading) return 'Loading...';
   if (error) return `Error! ${error.message}`;
-  // console.log(data.books);
 
   return (
     <div id="read-books">
