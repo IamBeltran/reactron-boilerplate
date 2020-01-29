@@ -2,10 +2,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-// ▶ Import components
 // ▶ Import Apollo modules
 import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
+
+// ▶ Import components
+import LoadingQuery from './LoadingQuery';
+import ErrorQuery from './ErrorQuery';
 
 const GET_BOOKS = gql`
   query Books {
@@ -21,8 +24,8 @@ const ReadBooks = props => {
   const { onClosePortal02 } = props;
   const { data, loading, error } = useQuery(GET_BOOKS);
 
-  if (loading) return 'Loading...';
-  if (error) return `Error! ${error.message}`;
+  if (loading) return <LoadingQuery onClosePortal02={onClosePortal02} />;
+  if (error) return <ErrorQuery onClosePortal02={onClosePortal02} error={error} />;
 
   return (
     <div id="read-books">
@@ -34,11 +37,11 @@ const ReadBooks = props => {
       <div className="modal-main-wrapper">
         <div className="scrollable">
           <table className="table-control">
-            <caption>Lista de libros</caption>
+            <caption>The 100 best books of all time</caption>
             <thead>
               <tr>
-                <th>Titulo</th>
-                <th>Autor</th>
+                <th>Title</th>
+                <th>Author</th>
               </tr>
             </thead>
             <tbody>
@@ -62,11 +65,7 @@ const ReadBooks = props => {
         </div>
       </div>
       <div className="modal-alert-wrapper">
-        {/*
-          <div className="loading-wrapper">Loading...</div>
-          {errorQuery && <div className="error-wrapper">{errorQuery}</div>}
-          {loadingQuery && <div className="loading-wrapper">Loading...</div>}
-        */}
+        {/* <div className="loading-wrapper">Loading...</div> */}
       </div>
     </div>
   );
