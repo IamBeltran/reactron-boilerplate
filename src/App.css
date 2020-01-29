@@ -279,6 +279,10 @@ div.submit-control button.btn.btn-submit.btn-disabled {
   border: 1px solid transparent;
 }
 
+div.query-errors {
+  color: #000000;
+}
+
 div.modal-alert-wrapper {
   margin-top: 10px;
 }
@@ -362,6 +366,9 @@ div.pagination {
 div.pagination div.pagination-legend {
   align-self: center;
   color: #000000;
+  font-size: 0.8rem;
+  font-weight: bold;
+  font-style: italic;
 }
 
 div.pagination button.btn-pagination {
