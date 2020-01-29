@@ -19,12 +19,68 @@ const { createBook, readBooks, readBookById, updateBookById, deleteBookById } = 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ DECLARATION OF CONSTANTS-VARIABLES.                                               │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-// const bookProperties = ['id', 'title', 'author', 'year', 'country', 'language'];
+const properties = ['id', 'title', 'author', 'year', 'country', 'language'];
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ DECLARATION OF AUXILIARY FUNCTIONS.                                               │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
-// const isValidProperties = propertie => bookProperties.includes(propertie);
+const isValidProperties = propertie => properties.includes(propertie);
+
+const filter = (array, { key = null, value = null, exclude = false } = {}) => {
+  const hasKey = !!key;
+  const hasValue = !!value;
+  const hasFilters = hasKey || hasValue;
+  const isPropertie = isValidProperties(key);
+  const regex = new RegExp(`${value}`, 'i');
+  if (!hasFilters) {
+    return array;
+  }
+  if (!isPropertie) {
+    return array;
+  }
+  if (exclude) {
+    return array.filter(item => !regex.test(item[`${key}`]));
+  }
+  return array.filter(item => !regex.test(item[`${key}`]));
+};
+
+const sortBy = ({ key, asc }) => (first, second) => {
+  if (asc) {
+    if (first[`${key}`] > second[`${key}`]) return 1;
+    if (second[`${key}`] > first[`${key}`]) return -1;
+  } else {
+    if (first[`${key}`] > second[`${key}`]) return -1;
+    if (second[`${key}`] > first[`${key}`]) return 1;
+  }
+  return 0;
+};
+
+const getPagination = (array, { results = null, page = null } = {}) => {
+  const count = array.length;
+  const dividend = results === null ? count : results;
+  const division = count / dividend;
+  const pages = parseInt(division, 10) === division ? division : parseInt(division, 10) + 1;
+  const currentPage = page === null ? 1 : page > pages ? pages : page; // eslint-disable-line no-nested-ternary
+  const hasPreviousPage = !(currentPage <= 1);
+  const hasNextPage = !(currentPage >= pages);
+  const previousPage = hasPreviousPage ? currentPage - 1 : null;
+  const nextPage = hasNextPage ? currentPage + 1 : null;
+  const offset = hasPreviousPage ? (currentPage - 1) * results : 0;
+  const limit = hasNextPage ? offset + results : count;
+  const result = array.slice(offset, limit);
+  return {
+    info: {
+      count,
+      pages,
+      hasNextPage,
+      hasPreviousPage,
+      nextPage,
+      currentPage,
+      previousPage,
+    },
+    books: result,
+  };
+};
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
 //  │ SET MAIN MODULE - [NAME-MODULE].                                                  │
@@ -50,6 +106,17 @@ const rootValue = {
   books: async () => {
     return readBooks()
       .then(books => books)
+      .catch(err => err);
+  },
+  booksPagination: async ({ input }) => {
+    const hasInputFilter = !!input.filter;
+    const hasInputSortBy = !!input.sortBy;
+    const hasInputPagination = !!input.pagination;
+
+    return readBooks()
+      .then(books => (hasInputFilter ? filter(books, input.filter) : books))
+      .then(books => (hasInputSortBy ? sortBy(books, input.sortBy) : books))
+      .then(books => (hasInputPagination ? getPagination(books, input.pagination) : books))
       .catch(err => err);
   },
   getBook: async ({ id }) => {
