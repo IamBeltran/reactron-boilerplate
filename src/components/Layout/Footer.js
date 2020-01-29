@@ -73,7 +73,7 @@ const Footer = () => {
         </Portal02>
       )}
       <div id="copyright">© Copyright {year} All rights reserved.</div>
-      <div id="portals">
+      <div id="portals-wrapper">
         <div>Portals:</div>
         <button type="button" className="btn btn-portal" onClick={onOpenPortal01}>
           Portal 01
