@@ -253,7 +253,12 @@ input.input-control {
   flex: 0 1 70%;
   padding: 3px;
   border: solid 1px #282c34;
+  outline: none;
   border-radius: 0px 10px 10px 0px;
+}
+
+input.input-control:focus {
+  box-shadow: 0 0 5px rgba(81, 203, 238, 1);
 }
 
 div.submit-control {
