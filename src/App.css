@@ -332,7 +332,7 @@ table.table-control {
 table.table-control caption {
   background-color: #282c34;
   color: #ffffff;
-  padding: 5px 0px;
+  padding: 5px;
 }
 
 table.table-control thead tr th {
