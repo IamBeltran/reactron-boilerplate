@@ -1,16 +1,34 @@
 // ▶ Import react dependecies
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 // ▶ Import components
+// ▶ Import Apollo modules
+import { gql } from 'apollo-boost';
+import { useQuery } from '@apollo/react-hooks';
 
 // ▶ Import dummie data
-import books from './bookDummie';
+// import books from './bookDummie';
+
+const GET_BOOKS = gql`
+  query Books {
+    books {
+      id
+      title
+      author
+    }
+  }
+`;
 
 const ReadBooks = props => {
   const { onClosePortal02 } = props;
-  const [loadingQuery] = useState(false); // , setLoadingQuery
-  const [errorQuery] = useState(false); // , setErrorQuery
+  const { data, loading, error } = useQuery(GET_BOOKS);
+  // const [loadingQuery, setLoadingQuery] = useState(false);
+  // const [errorQuery, setErrorQuery] = useState(false);
+
+  if (loading) return 'Loading...';
+  if (error) return `Error! ${error.message}`;
+  // console.log(data.books);
 
   return (
     <div id="read-books">
@@ -30,7 +48,7 @@ const ReadBooks = props => {
               </tr>
             </thead>
             <tbody>
-              {books.slice(0, 10).map(({ id, title, author }) => (
+              {data.books.slice(0, 10).map(({ id, title, author }) => (
                 <tr key={id}>
                   <td>{title}</td>
                   <td>{author}</td>
@@ -50,9 +68,11 @@ const ReadBooks = props => {
         </div>
       </div>
       <div className="modal-alert-wrapper">
-        {/* <div className="loading-wrapper">Loading...</div> */}
-        {errorQuery && <div className="error-wrapper">{errorQuery}</div>}
-        {loadingQuery && <div className="loading-wrapper">Loading...</div>}
+        {/*
+          <div className="loading-wrapper">Loading...</div>
+          {errorQuery && <div className="error-wrapper">{errorQuery}</div>}
+          {loadingQuery && <div className="loading-wrapper">Loading...</div>}
+        */}
       </div>
     </div>
   );
