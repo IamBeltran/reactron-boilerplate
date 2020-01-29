@@ -10,10 +10,10 @@ import { ApolloProvider } from '@apollo/react-hooks';
 
 // ▶ Import components
 import Layout from './components/Layout';
-// import { AuthProvider } from './context/AuthContext';
-// <AuthProvider></AuthProvider>
+// import { AuthProvider } from './context/AuthContext'; <AuthProvider></AuthProvider>
 
 // ▶ Import styles css
+import './App.css';
 
 // ▶ Import electron
 const { electron } = window;
