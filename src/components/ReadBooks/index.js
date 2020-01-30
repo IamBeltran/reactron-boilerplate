@@ -11,21 +11,90 @@ import LoadingQuery from './LoadingQuery';
 import ErrorQuery from './ErrorQuery';
 
 const GET_BOOKS = gql`
-  query Books {
-    books {
-      id
-      title
-      author
+  query GetBooks($input: GetBooksInput) {
+    getBooks(input: $input) {
+      info {
+        count
+        pages
+        hasNextPage
+        hasPreviousPage
+        nextPage
+        currentPage
+        previousPage
+      }
+      books {
+        id
+        title
+        author
+      }
     }
   }
 `;
 
 const ReadBooks = props => {
   const { onClosePortal02 } = props;
-  const { data, loading, error } = useQuery(GET_BOOKS);
+  const { data, fetchMore, loading, error } = useQuery(GET_BOOKS, {
+    variables: {
+      input: {
+        sortBy: {
+          key: 'title',
+          asc: true,
+        },
+        pagination: {
+          results: 10,
+          page: 1,
+        },
+      },
+    },
+    fetchPolicy: 'cache-and-network',
+  });
 
   if (loading) return <LoadingQuery onClosePortal02={onClosePortal02} />;
   if (error) return <ErrorQuery onClosePortal02={onClosePortal02} error={error} />;
+
+  const {
+    getBooks: {
+      info: { count, currentPage, hasNextPage, hasPreviousPage, nextPage, pages, previousPage },
+      books,
+    },
+  } = data;
+
+  const onClickPrev = async () => {
+    fetchMore({
+      variables: {
+        input: {
+          sortBy: {
+            key: 'title',
+            asc: true,
+          },
+          pagination: {
+            results: 10,
+            page: previousPage,
+          },
+        },
+      },
+      updateQuery: (previousResult, { fetchMoreResult }) => fetchMoreResult,
+    });
+  };
+
+  const onClickNext = () => {
+    fetchMore({
+      query: GET_BOOKS,
+      variables: {
+        input: {
+          sortBy: {
+            key: 'title',
+            asc: true,
+          },
+          pagination: {
+            results: 10,
+            page: nextPage,
+          },
+        },
+      },
+      updateQuery: (previousResult, { fetchMoreResult }) => fetchMoreResult,
+    });
+  };
 
   return (
     <div id="read-books">
@@ -45,7 +114,7 @@ const ReadBooks = props => {
               </tr>
             </thead>
             <tbody>
-              {data.books.slice(0, 10).map(({ id, title, author }) => (
+              {books.map(({ id, title, author }) => (
                 <tr key={id}>
                   <td>{title}</td>
                   <td>{author}</td>
@@ -55,11 +124,23 @@ const ReadBooks = props => {
           </table>
         </div>
         <div className="pagination">
-          <div className="pagination-legend">Page: 1 of 7</div>
-          <button type="button" className="btn-pagination">
+          <div className="pagination-legend">
+            Books: <span>{count}</span> - Page: <span>{currentPage}</span> of <span>{pages}</span>
+          </div>
+          <button
+            type="button"
+            className={`btn-pagination ${!hasPreviousPage ? 'btn-disabled' : ''}`}
+            onClick={onClickPrev}
+            disabled={!hasPreviousPage}
+          >
             Prev
           </button>
-          <button type="button" className="btn-pagination">
+          <button
+            type="button"
+            className={`btn-pagination ${!hasNextPage ? 'btn-disabled' : ''}`}
+            onClick={onClickNext}
+            disabled={!hasNextPage}
+          >
             Next
           </button>
         </div>
