@@ -41,7 +41,7 @@ const filter = (array, { key = null, value = null, exclude = false } = {}) => {
   if (exclude) {
     return array.filter(item => !regex.test(item[`${key}`]));
   }
-  return array.filter(item => !regex.test(item[`${key}`]));
+  return array.filter(item => regex.test(item[`${key}`]));
 };
 
 const sortBy = ({ key, asc }) => (first, second) => {
@@ -102,7 +102,6 @@ const rootValue = {
     const hasInputFilter = !!input.filter;
     const hasInputSortBy = !!input.sortBy;
     const hasInputPagination = !!input.pagination;
-
     return readBooks()
       .then(books => (hasInputFilter ? filter(books, input.filter) : books))
       .then(books => (hasInputSortBy ? books.sort(sortBy(input.sortBy)) : books))
