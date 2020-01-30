@@ -28,6 +28,17 @@ const { buildSchema } = graphql;
 //  │ SET MAIN MODULE - [NAME-MODULE].                                                  │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 const schema = buildSchema(`
+  # SECTION: ENUM
+  enum Key {
+    id
+    title
+    author
+    year
+    country
+    language
+  }
+  # !SECTION
+
   # SECTION: CUSTOM SCALAR
   scalar Value
 
@@ -57,13 +68,13 @@ const schema = buildSchema(`
 
   # SECTION: INPUTS
   input Filter {
-    key: String!
+    key: Key!
     value: Value!
     exclude: Boolean!
   }
 
   input SortBy {
-    key: String!
+    key: Key!
     asc: Boolean!
   }
 
