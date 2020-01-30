@@ -98,17 +98,7 @@ const getPagination = (array, { results = null, page = null } = {}) => {
  *                    only be used in advanced cases
  * */
 const rootValue = {
-  createBook: async ({ input }) => {
-    return createBook(input)
-      .then(book => book)
-      .catch(err => err);
-  },
-  books: async () => {
-    return readBooks()
-      .then(books => books)
-      .catch(err => err);
-  },
-  booksPagination: async ({ input }) => {
+  getBooks: async ({ input }) => {
     const hasInputFilter = !!input.filter;
     const hasInputSortBy = !!input.sortBy;
     const hasInputPagination = !!input.pagination;
@@ -122,6 +112,11 @@ const rootValue = {
   getBook: async ({ id }) => {
     return readBookById(id)
       .then(book => book[0])
+      .catch(err => err);
+  },
+  createBook: async ({ input }) => {
+    return createBook(input)
+      .then(book => book)
       .catch(err => err);
   },
   updateBook: async ({ input }) => {

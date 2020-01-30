@@ -28,12 +28,64 @@ const { buildSchema } = graphql;
 //  │ SET MAIN MODULE - [NAME-MODULE].                                                  │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 const schema = buildSchema(`
+  # SECTION: CUSTOM SCALAR
+  scalar Value
 
-  # SECTION: TYPE INPUTS
+  type Book {
+    id: ID!
+    title: String!
+    author: String!
+    createAt: String!
+    updatedAt: String!
+  }
+
+  type Info {
+    count: Int!
+    pages: Int!
+    hasNextPage: Boolean
+    hasPreviousPage: Boolean
+    nextPage: Int
+    currentPage: Int
+    previousPage: Int
+  }
+
+  type Error {
+    name: String!
+    message: String!
+  }
+  # !SECTION
+
+  # SECTION: INPUTS
+  input Filter {
+    key: String!
+    value: Value!
+    exclude: Boolean!
+  }
+
+  input SortBy {
+    key: String!
+    asc: Boolean!
+  }
+
+  input Pagination {
+    results: Int
+    page: Int
+  }
+
+  input GetBooksInput {
+    filter: Filter
+    sortBy: SortBy
+    pagination: Pagination
+  }
+
+  input GetBookInput {
+    id: ID!
+  }
+
   input CreateBookInput {
     title: String!
     author: String!
-    year: Int,
+    year: Int!,
     country: String!
     language: String!
   }
@@ -42,7 +94,7 @@ const schema = buildSchema(`
     id: ID!
     title: String!
     author: String!
-    year: Int,
+    year: Int!,
     country: String!
     language: String!
   }
@@ -52,40 +104,17 @@ const schema = buildSchema(`
   }
   # !SECTION
 
-  # SECTION: TYPE OUTPUTS
-  type CreateBookOutput {
-    ok: Boolean!
-    error: String
-    book: Book
-  }
-
-  type GetBookOutput {
-    ok: Boolean!
-    error: String
-    book: Book
-  }
-  # !SECTION
-
-  # SECTION: CUSTOM SCALAR
-  # This "Book" type can be used in other type declarations.
-  type Book {
-    id: ID!
-    title: String!
-    author: String!
-    createAt: String!
-    updatedAt: String!
-  }
-
-  type Error {
-    name: String!
-    message: String!
+  # SECTION: OUTPUTS
+  type GetBooksOutput {
+    info: Info
+    books: [Book]
   }
   # !SECTION
 
   # SECTION: QUERYS
   type Query {
-    books: [Book]
-    getBook(id: ID!): Book
+    getBooks(input: GetBooksInput): GetBooksOutput
+    getBook(input: GetBookInput): Book
   }
   # !SECTION
 
@@ -97,7 +126,12 @@ const schema = buildSchema(`
   }
   # !SECTION
 
+  # SECTION: SCHEMA
+  schema {
+    query: Query
+    mutation: Mutation
+  }
+  # !SECTION
 `);
-
 //  ──[ EXPORT MODULE ]──────────────────────────────────────────────────────────────────
 module.exports = schema;
