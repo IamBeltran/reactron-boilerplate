@@ -9,11 +9,13 @@ import { useMutation } from '@apollo/react-hooks';
 
 // » Querie Books
 const GET_BOOKS = gql`
-  query Books {
-    books {
-      id
-      title
-      author
+  query GetBooks($input: GetBooksInput = {}) {
+    getBooks(input: $input) {
+      books {
+        id
+        title
+        author
+      }
     }
   }
 `;
@@ -38,7 +40,11 @@ const updateCache = (cache, { data }) => {
 
   cache.writeQuery({
     query: GET_BOOKS,
-    data: { books: [...existingBooks.books, NEW_BOOK] },
+    data: {
+      getBooks: {
+        books: [...existingBooks.books, NEW_BOOK],
+      },
+    },
   });
 };
 
@@ -63,14 +69,13 @@ const CreateBook = props => {
   };
 
   const setError = err => {
-    const { message } = err;
-    setErrorQuery(message);
+    setErrorQuery(err.message);
     setTimeout(() => setErrorQuery(false), 1500);
   };
 
   const [createBook] = useMutation(CREATE_BOOK, {
     update: updateCache,
-    onError: () => setError('Failure to created book'),
+    onError: err => setError(err),
     onCompleted: resetInputs,
   });
 
@@ -89,8 +94,12 @@ const CreateBook = props => {
     });
   };
 
-  const isDisabled =
-    author === '' || title === '' || year === '' || country === '' || language === '';
+  const hasAuthor = author !== '';
+  const hasTitle = title !== '';
+  const hasYear = year !== '';
+  const hasCountry = country !== '';
+  const hasLanguage = language !== '';
+  const isDisabled = !hasAuthor || !hasTitle || !hasYear || !hasCountry || !hasLanguage;
 
   return (
     <div id="create-book">
