@@ -372,8 +372,11 @@ div.pagination div.pagination-legend {
   align-self: center;
   color: #000000;
   font-size: 0.8rem;
-  font-weight: bold;
   font-style: italic;
+}
+
+div.pagination-legend span {
+  font-weight: bold;
 }
 
 div.pagination button.btn-pagination {
