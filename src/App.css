@@ -394,6 +394,12 @@ div.pagination button.btn-pagination {
   margin-left: 5px;
 }
 
+button.btn-pagination.btn-disabled{
+  background-color:rgba(255, 255, 255, 0.75) !important;
+  color:  #282c34 !important;
+  cursor: default;
+}
+
 /*  ┌───────────────────────────────────────────────────────────────────────────────────┐
  *  │ CLASSES                                                                           │
  *  └───────────────────────────────────────────────────────────────────────────────────┘ */
