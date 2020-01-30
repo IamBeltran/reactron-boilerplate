@@ -115,8 +115,8 @@ const rootValue = {
 
     return readBooks()
       .then(books => (hasInputFilter ? filter(books, input.filter) : books))
-      .then(books => (hasInputSortBy ? sortBy(books, input.sortBy) : books))
-      .then(books => (hasInputPagination ? getPagination(books, input.pagination) : books))
+      .then(books => (hasInputSortBy ? books.sort(sortBy(input.sortBy)) : books))
+      .then(books => (hasInputPagination ? getPagination(books, input.pagination) : { books }))
       .catch(err => err);
   },
   getBook: async ({ id }) => {
