@@ -45,7 +45,7 @@ const utilsPath = path.join(__dirname, '..', 'system', 'utils');
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 const graphql = require(graphqlPath);
 const helpers = require(helpersPath);
-const database = require(storePath);
+const store = require(storePath);
 const utils = require(utilsPath);
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
@@ -159,7 +159,7 @@ if (isDevelopment) {
   loggerWithLabel('     Videos', app.getPath('videos'));
   loggerWithLabel('       Logs', app.getPath('logs'));
   loggerWithLabel('   App Path', app.getAppPath());
-  loggerWithLabel(' Store Path', database.path);
+  loggerWithLabel(' Store Path', store.path);
   // loggerWithLabel('FlashSystem', app.getPath('pepperFlashSystemPlugin'));
 }
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
@@ -255,7 +255,7 @@ const link = createSchemaLink({
   contextValue: async context => {
     loggerInfo(`Context: ${Object.keys(context)}`);
     return {
-      database,
+      store,
     };
   },
 });
