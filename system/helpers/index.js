@@ -1,5 +1,5 @@
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
-//  │ REQUIRE UTILS MODULES.                                                            │
+//  │ REQUIRE HELPER MODULES.                                                           │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 const getAssets = require('./getAssets');
 const loggers = require('./loggers');
