@@ -1,5 +1,5 @@
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
-//  │ REQUIRE GRAPHQLUTILS MODULES.                                                     │
+//  │ REQUIRE GRAPHQL MODULES.                                                          │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 const schema = require('./schema');
 const rootValue = require('./rootValue');
