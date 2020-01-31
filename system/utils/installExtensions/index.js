@@ -51,7 +51,7 @@ const installerPromisify = extension => {
 };
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
-//  │ SET MAIN MODULE - [NAME-MODULE].                                                  │
+//  │ SET MAIN MODULE - INSTALLEXTENSIONS.                                              │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 const installExtensions = async () => {
   try {
