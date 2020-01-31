@@ -10,6 +10,7 @@ import { useQuery } from '@apollo/react-hooks';
 import LoadingQuery from './LoadingQuery';
 import ErrorQuery from './ErrorQuery';
 
+// » Querie GetBooks
 const GET_BOOKS = gql`
   query GetBooks($input: GetBooksInput) {
     getBooks(input: $input) {
