@@ -108,7 +108,7 @@ const dateToISOString = (date = new Date()) => {
 };
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
-//  │ SET MAIN MODULE - DataStore.                                                      │
+//  │ SET MAIN MODULE - DATASTORE.                                                      │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 // NOTE: CRUD - CREATE READ UPDATE DELETE
 /**
