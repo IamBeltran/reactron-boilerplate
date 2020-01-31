@@ -83,7 +83,7 @@ const getPagination = (array, { results = null, page = null } = {}) => {
 };
 
 //  ┌───────────────────────────────────────────────────────────────────────────────────┐
-//  │ SET MAIN MODULE - [NAME-MODULE].                                                  │
+//  │ SET MAIN MODULE - ROOTVALUE.                                                      │
 //  └───────────────────────────────────────────────────────────────────────────────────┘
 /**
  *  NOTE: Resolvers
