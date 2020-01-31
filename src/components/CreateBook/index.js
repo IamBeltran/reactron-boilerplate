@@ -7,20 +7,7 @@ import PropTypes from 'prop-types';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
 
-// » Querie Books
-const GET_BOOKS = gql`
-  query GetBooks($input: GetBooksInput = {}) {
-    getBooks(input: $input) {
-      books {
-        id
-        title
-        author
-      }
-    }
-  }
-`;
-
-// » Querie CreateBook
+// » Mutation CreateBook
 const CREATE_BOOK = gql`
   mutation CreateBook($input: CreateBookInput) {
     createBook(input: $input) {
@@ -32,21 +19,6 @@ const CREATE_BOOK = gql`
 `;
 
 const currentYear = new Date().getFullYear();
-const updateCache = (cache, { data }) => {
-  const existingBooks = cache.readQuery({
-    query: GET_BOOKS,
-  });
-  const NEW_BOOK = data.createBook;
-
-  cache.writeQuery({
-    query: GET_BOOKS,
-    data: {
-      getBooks: {
-        books: [...existingBooks.books, NEW_BOOK],
-      },
-    },
-  });
-};
 
 const CreateBook = props => {
   const { onClosePortal01 } = props;
@@ -74,7 +46,7 @@ const CreateBook = props => {
   };
 
   const [createBook] = useMutation(CREATE_BOOK, {
-    update: updateCache,
+    // update: updateCache,
     onError: err => setError(err),
     onCompleted: resetInputs,
   });
